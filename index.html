@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Lima Local Experience: traslados privados, tours, taxi VIP y experiencias gastronómicas en Lima, Callao y alrededores. Reserva por WhatsApp.">
+<meta name="theme-color" content="#0a1422">
+<meta property="og:title" content="Lima Local Experience · Traslados, tours y experiencias privadas">
+<meta property="og:description" content="Movilidad privada y experiencias locales en Lima, Callao y provincias. Español e inglés.">
+<meta property="og:image" content="assets/img/promo-es-sm.webp">
+<title>Lima Local Experience | Traslados, Tours y Experiencias Privadas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="preload" as="image" href="assets/img/promo-es-sm.webp" fetchpriority="high">
+<style>
+:root{
+  --bg:#f6f4ef;--surface:#fff;--ink:#0d1726;--ink-2:#3b4656;--muted:#6b7584;
+  --line:rgba(13,23,38,.09);--navy:#0a1422;--navy-2:#13243b;
+  --gold:#c9a45c;--gold-2:#e9cf94;--gold-ink:#7a5a1c;
+  --wa:#1fb855;--wa-2:#179848;
+  --r-sm:12px;--r:20px;--r-lg:28px;
+  --sh-1:0 1px 2px rgba(13,23,38,.06),0 4px 14px rgba(13,23,38,.05);
+  --sh-2:0 2px 6px rgba(13,23,38,.06),0 22px 48px -12px rgba(13,23,38,.22);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+svg.i{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Header ---------- */
+.hdr{position:fixed;inset:0 0 auto;z-index:40;color:#fff;transition:background .3s var(--ease),box-shadow .3s var(--ease),padding .3s var(--ease);padding:18px 0}
+.hdr.solid{background:rgba(10,20,34,.82);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);box-shadow:0 1px 0 rgba(255,255,255,.06);padding:10px 0}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(140deg,var(--gold-2),var(--gold));color:var(--navy);font:600 17px/1 var(--serif);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.25)}
+.brand b{display:block;font-weight:600;font-size:15.5px;letter-spacing:-.1px}
+.brand small{display:block;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold-2);font-weight:600}
+.nav{display:flex;align-items:center;gap:6px}
+.nav a{font-size:14px;font-weight:500;color:rgba(255,255,255,.78);padding:8px 13px;border-radius:999px;transition:color .2s,background .2s}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.hdr-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--navy);font-weight:600;font-size:14px;padding:10px 16px;border-radius:999px;transition:transform .2s var(--ease)}
+.hdr-cta:hover{transform:translateY(-1px)}
+
+/* ---------- Buttons ---------- */
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:15px;padding:15px 22px;border-radius:14px;transition:transform .2s var(--ease),background .2s,box-shadow .2s;will-change:transform}
+.btn:active{transform:scale(.98)}
+.btn-gold{background:linear-gradient(140deg,var(--gold-2),var(--gold));color:var(--navy);box-shadow:0 10px 26px -8px rgba(201,164,92,.7)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 32px -10px rgba(201,164,92,.85)}
+.btn-ghost{color:#fff;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.13)}
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 10px 24px -8px rgba(31,184,85,.6)}
+.btn-wa:hover{background:var(--wa-2);transform:translateY(-2px)}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-dark:hover{background:var(--navy-2)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;color:#fff;background:var(--navy);padding:140px 0 110px;overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2;background:url(assets/img/hero-bg.webp) center/cover no-repeat;opacity:.35;transform:scale(1.08)}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(800px 500px at 80% 10%,rgba(201,164,92,.25),transparent 60%),
+  linear-gradient(90deg,rgba(10,20,34,.97) 0%,rgba(10,20,34,.86) 45%,rgba(10,20,34,.55) 100%),
+  linear-gradient(0deg,var(--navy),transparent 40%)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.85);padding:7px 14px 7px 8px;border-radius:999px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--wa);box-shadow:0 0 0 4px rgba(31,184,85,.2);margin-left:6px}
+.hero h1{font:500 clamp(44px,6.4vw,84px)/.98 var(--serif);letter-spacing:-.03em;margin:26px 0 22px}
+.hero h1 em{font-style:italic;color:var(--gold-2)}
+.hero .lead{font-size:clamp(16px,1.5vw,19px);color:rgba(255,255,255,.72);max-width:540px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.facts{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:0;margin-top:46px;border-top:1px solid rgba(255,255,255,.1);padding-top:24px}
+.facts div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(255,255,255,.1)}
+.facts div:last-child{border:0;margin:0;padding:0}
+.facts b{display:block;font:500 26px/1.1 var(--serif);color:#fff}
+.facts span{font-size:12.5px;color:rgba(255,255,255,.55)}
+.poster{position:relative;justify-self:center;width:min(380px,100%)}
+.poster-card{border-radius:26px;overflow:hidden;box-shadow:0 40px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);transform:rotate(1.5deg);transition:transform .5s var(--ease);aspect-ratio:2/3;background:var(--navy-2)}
+.poster:hover .poster-card{transform:rotate(0) translateY(-4px)}
+.poster-card img{width:100%;height:100%;object-fit:cover}
+.chip-float{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.96);color:var(--ink);padding:10px 14px 10px 10px;border-radius:16px;box-shadow:var(--sh-2);font-size:13px;font-weight:600;line-height:1.2}
+.chip-float small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.chip-float .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:#f3ecdc;color:var(--gold-ink)}
+.cf-1{left:-44px;top:18%;animation:float 6s ease-in-out infinite}
+.cf-2{right:-30px;bottom:14%;animation:float 6s ease-in-out -3s infinite}
+.lang-toggle{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);display:flex;background:rgba(10,20,34,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:4px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.lang-toggle button{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.65);padding:8px 14px;border-radius:999px;transition:.2s}
+.lang-toggle button[aria-pressed=true]{background:#fff;color:var(--navy)}
+@keyframes float{50%{transform:translateY(-8px)}}
+
+/* ---------- Trust strip ---------- */
+.strip{background:var(--navy);color:rgba(255,255,255,.7);border-top:1px solid rgba(255,255,255,.06)}
+.strip-in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 28px;padding:20px 0;font-size:13.5px}
+.strip-in span{display:inline-flex;align-items:center;gap:9px}
+.strip-in svg{color:var(--gold-2)}
+
+/* ---------- Sections ---------- */
+section{padding:110px 0}
+.head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:40px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold-ink)}
+.h2{font:500 clamp(34px,4.4vw,54px)/1.04 var(--serif);letter-spacing:-.025em;margin-top:12px}
+.h2 em{font-style:italic;color:var(--gold-ink)}
+.sub{color:var(--muted);font-size:16.5px;max-width:520px;margin-top:14px}
+
+/* ---------- Catalog ---------- */
+.tabs{flex:none;max-width:100%;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px;margin:-4px;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;font-size:14px;font-weight:500;padding:10px 17px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2);transition:background .2s,color .2s,box-shadow .2s}
+.tab:hover{box-shadow:inset 0 0 0 1px rgba(13,23,38,.25)}
+.tab[aria-selected=true]{background:var(--navy);color:#fff;box-shadow:none}
+.tab sup{font-size:11px;opacity:.6;margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-1);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.card:hover{transform:translateY(-6px);box-shadow:var(--sh-2)}
+.card.hide{display:none}
+.media{position:relative;aspect-ratio:357/138;overflow:hidden;background:#dfe3e8}
+.media img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.card:hover .media img{transform:scale(1.06)}
+.media:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,34,.25),transparent 35%,transparent 60%,rgba(10,20,34,.35))}
+.badge{position:absolute;z-index:1;left:14px;top:14px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--ink);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.badge svg{width:14px;height:14px;color:var(--gold-ink)}
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.loc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);font-weight:500}
+.loc svg{width:14px;height:14px}
+.card h3{font-size:19px;font-weight:600;letter-spacing:-.2px;margin:6px 0 6px;line-height:1.25}
+.card p{font-size:14.5px;color:var(--muted);flex:1}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.price small{display:block;font-size:11.5px;color:var(--muted);font-weight:500}
+.price b{font-size:18px;font-weight:700;letter-spacing:-.2px}
+.price i{font-style:normal;font-size:13px;color:var(--muted);font-weight:500}
+.go{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;padding:11px 15px;border-radius:12px;background:var(--navy);color:#fff;transition:background .2s,gap .2s var(--ease)}
+.go:hover{background:var(--navy-2);gap:10px}
+.go svg{width:16px;height:16px}
+.card-link{position:absolute;inset:0;z-index:0}
+
+/* ---------- Steps ---------- */
+.how{background:var(--surface)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+.step{position:relative;padding:32px 28px;border-radius:var(--r);background:var(--bg);counter-increment:s}
+.step:before{content:"0" counter(s);font:500 15px/1 var(--serif);color:var(--gold-ink);display:block;margin-bottom:34px}
+.step .ic{width:52px;height:52px;border-radius:15px;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;position:absolute;right:26px;top:24px}
+.step .ic svg{width:24px;height:24px}
+.step h3{font-size:19px;font-weight:600;margin-bottom:6px}
+.step p{color:var(--muted);font-size:14.5px}
+
+/* ---------- Booking ---------- */
+.booking{background:linear-gradient(180deg,var(--bg),#efece4)}
+.book{display:grid;grid-template-columns:1.35fr .65fr;gap:24px;align-items:start}
+.panel{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-2);overflow:hidden}
+.progress{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.progress button{position:relative;display:flex;align-items:center;gap:10px;padding:18px 22px;font-size:13.5px;font-weight:600;color:var(--muted);text-align:left}
+.progress button:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.progress button span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--bg);color:var(--ink-2);transition:.3s}
+.progress button.on{color:var(--ink)}
+.progress button.on:after{transform:scaleX(1)}
+.progress button.on span{background:var(--navy);color:#fff}
+.progress button.done span{background:var(--gold);color:var(--navy)}
+.progress button:disabled{cursor:default}
+.pane{display:none;padding:30px;animation:in .45s var(--ease)}
+.pane.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.pane h3{font:500 26px/1.15 var(--serif);letter-spacing:-.02em}
+.pane .hint{color:var(--muted);font-size:14px;margin:6px 0 22px}
+.pick-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:380px;overflow:auto;padding:2px;margin:-2px}
+.opt{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);text-align:left;transition:box-shadow .2s,background .2s}
+.opt:hover{box-shadow:inset 0 0 0 1px rgba(13,23,38,.3)}
+.opt img{width:56px;height:42px;border-radius:9px;object-fit:cover;flex:none}
+.opt b{display:block;font-size:14px;font-weight:600;line-height:1.25}
+.opt small{font-size:12.5px;color:var(--muted)}
+.opt[aria-checked=true]{background:#fbf7ee;box-shadow:inset 0 0 0 2px var(--gold)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fld{display:block;margin-top:16px}
+.fld>span{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:7px}
+.fld input,.fld textarea{width:100%;padding:14px 15px;border-radius:13px;border:0;background:var(--bg);box-shadow:inset 0 0 0 1px transparent;outline:none;font-size:15px;transition:box-shadow .2s,background .2s}
+.fld input:focus,.fld textarea:focus{background:#fff;box-shadow:inset 0 0 0 2px var(--gold)}
+.fld input.bad{box-shadow:inset 0 0 0 2px #d44b3c;background:#fff6f5}
+.fld textarea{min-height:96px;resize:vertical}
+.pax{display:flex;align-items:center;justify-content:space-between;padding:10px 10px 10px 16px;border-radius:14px;background:var(--bg);margin-top:18px}
+.pax b{font-size:14.5px;font-weight:600;display:block}
+.pax small{font-size:12.5px;color:var(--muted)}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper button{width:38px;height:38px;border-radius:11px;background:#fff;box-shadow:var(--sh-1);font-size:20px;line-height:1;display:grid;place-items:center}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{width:30px;text-align:center;font-weight:700;font-size:16px}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+.nav-row .btn{padding:14px 20px}
+.back{color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line)}
+.back:hover{background:var(--bg)}
+.summary{position:sticky;top:96px;background:var(--navy);color:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-2)}
+.summary .media{aspect-ratio:16/8}
+.sum-body{padding:22px 24px 24px}
+.sum-body .eyebrow{color:var(--gold-2)}
+.sum-body h4{font:500 22px/1.2 var(--serif);margin:6px 0 16px}
+.sum-body dl{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;font-size:13.5px}
+.sum-body dt{color:rgba(255,255,255,.5)}
+.sum-body dd{text-align:right;color:#fff;font-weight:500;overflow-wrap:anywhere}
+.sum-total{display:flex;justify-content:space-between;align-items:end;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)}
+.sum-total small{color:rgba(255,255,255,.55);font-size:12px;display:block}
+.sum-total b{font-size:22px;font-weight:700}
+.sum-note{font-size:12px;color:rgba(255,255,255,.5);margin-top:12px}
+
+/* ---------- Why ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.why{padding:26px 22px;border-radius:var(--r);background:var(--surface);box-shadow:var(--sh-1)}
+.why .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:#f3ecdc;color:var(--gold-ink);margin-bottom:18px}
+.why b{display:block;font-size:16px;font-weight:600}
+.why span{font-size:14px;color:var(--muted)}
+
+/* ---------- Custom CTA ---------- */
+.cta{padding:0 0 110px}
+.cta-box{position:relative;border-radius:32px;background:var(--navy);color:#fff;padding:64px;display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center;overflow:hidden;isolation:isolate}
+.cta-box:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px 300px at 90% 0%,rgba(201,164,92,.35),transparent 60%),radial-gradient(500px 300px at 0% 100%,rgba(31,184,85,.12),transparent 60%)}
+.cta-box .eyebrow{color:var(--gold-2)}
+.cta-box .h2 em{color:var(--gold-2)}
+.cta-box .sub{color:rgba(255,255,255,.65)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.tags span{font-size:13px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.cta-actions{display:grid;gap:10px;justify-items:stretch}
+
+/* ---------- FAQ ---------- */
+.faq-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-size:17px;font-weight:600;cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"";width:12px;height:12px;flex:none;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(45deg) translateY(-4px);transition:transform .3s var(--ease)}
+.faq details[open] summary:after{transform:rotate(-135deg) translateY(-2px)}
+.faq details p{color:var(--muted);padding:0 40px 22px 0;font-size:15px}
+
+/* ---------- Footer ---------- */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:70px 0 40px;font-size:14px}
+.ft{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.ft h5{color:#fff;font-size:13px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:14px}
+.ft a{display:block;padding:4px 0;transition:color .2s}
+.ft a:hover{color:var(--gold-2)}
+.ft .brand{color:#fff;margin-bottom:16px}
+.ft-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:50px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px;color:rgba(255,255,255,.4)}
+
+/* ---------- Floating WA + mobile tab bar ---------- */
+.fab{position:fixed;right:22px;bottom:22px;z-index:45;width:60px;height:60px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(31,184,85,.7);transition:transform .25s var(--ease)}
+.fab:hover{transform:scale(1.06)}
+.fab svg{width:28px;height:28px;fill:#fff;stroke:none}
+.tabbar{display:none}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(5,10,18,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.modal.open{opacity:1;visibility:visible}
+.modal-in{position:relative;width:min(460px,100%);transform:scale(.96);transition:transform .35s var(--ease)}
+.modal.open .modal-in{transform:none}
+.modal img{width:100%;max-height:86vh;object-fit:contain;border-radius:20px}
+.modal .x{position:absolute;right:-10px;top:-10px;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:var(--sh-2)}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;left:50%;bottom:28px;z-index:120;transform:translate(-50%,20px);opacity:0;background:var(--navy);color:#fff;font-size:14px;font-weight:500;padding:12px 18px;border-radius:12px;box-shadow:var(--sh-2);transition:.3s var(--ease);pointer-events:none;display:flex;gap:8px;align-items:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast svg{color:var(--gold-2)}
+
+/* ---------- Reveal ---------- */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1080px){
+  .hero-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .cf-1{left:-16px}.cf-2{right:-10px}
+  .why-grid{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:900px){
+  .nav,.hdr-cta{display:none}
+  .hero{padding:118px 0 90px}
+  .hero-grid{grid-template-columns:1fr}
+  .poster{width:min(330px,82%);margin-top:10px}
+  .facts{grid-template-columns:repeat(2,1fr);gap:18px}
+  .facts div{border:0;margin:0;padding:0}
+  .head{flex-direction:column;align-items:stretch}
+  .steps{grid-template-columns:1fr}
+  .book{grid-template-columns:1fr}
+  .summary{position:relative;top:0;order:-1}
+  .summary .media{display:none}
+  .cta-box{grid-template-columns:1fr;padding:44px 30px}
+  .faq-wrap{grid-template-columns:1fr;gap:20px}
+  .ft{grid-template-columns:1fr 1fr}
+  .ft>div:first-child{grid-column:1/-1}
+  /* app-like bottom bar */
+  .fab{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:45;background:rgba(10,20,34,.9);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-radius:20px;padding:6px;box-shadow:0 18px 40px -10px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.08)}
+  .tabbar a{display:grid;justify-items:center;gap:3px;padding:8px 0;border-radius:14px;font-size:11px;font-weight:500;color:rgba(255,255,255,.6);transition:color .2s,background .2s}
+  .tabbar a.on{color:#fff;background:rgba(255,255,255,.08)}
+  .tabbar a.wa{color:#fff;background:var(--wa)}
+  .tabbar svg{width:21px;height:21px}
+  body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media (max-width:620px){
+  .wrap{width:min(1200px,100% - 32px)}
+  section{padding:78px 0}
+  .cta{padding-bottom:78px}
+  .grid{grid-template-columns:1fr;gap:16px}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .why:last-child{grid-column:1/-1}
+  .row,.pick-list{grid-template-columns:1fr}
+  .pick-list{max-height:none}
+  .pane{padding:22px 18px}
+  .progress button{padding:14px 10px;font-size:12px;flex-direction:column;gap:6px;text-align:center}
+  .strip-in{justify-content:flex-start;gap:10px 20px;font-size:12.5px}
+  .cf-1{left:-8px;top:10%}.cf-2{right:-8px}
+  .chip-float{font-size:12px;padding:8px 11px 8px 8px}
+  .chip-float .ic{width:30px;height:30px}
+  .hero-actions .btn{flex:1}
+  .ft{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 17h14M5 17a2 2 0 1 0 4 0M15 17a2 2 0 1 0 4 0M3 17v-5l2-5h14l2 5v5M3 12h18"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 7h12l1 14H5zM9 7V5a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-chef" viewBox="0 0 24 24"><path d="M7 14a4 4 0 0 1-1-7.9A5 5 0 0 1 16 5a4 4 0 0 1 1 9M7 14v6h10v-6M7 17h10"/></symbol>
+  <symbol id="i-glass" viewBox="0 0 24 24"><path d="M5 4h14l-7 8zM12 12v8M8 20h8"/></symbol>
+  <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M9 21V10M15 21V10M2 10 12 3l10 7z"/></symbol>
+  <symbol id="i-ship" viewBox="0 0 24 24"><path d="M3 17c1.5 1.3 3 2 4.5 2s3-.7 4.5-2c1.5 1.3 3 2 4.5 2s3-.7 4.5-2M5 14l-1-4h16l-1 4M8 10V6h8v4M12 3v3"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.36-.5.06-1.13.09-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.8-4.18-4.94-4.37-.15-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.18 0 .41-.07.64.49.24.57.8 1.98.87 2.12.07.15.12.32.02.51-.1.2-.15.32-.29.49-.15.17-.31.39-.44.52-.15.15-.3.3-.13.6.17.29.76 1.26 1.64 2.04 1.12 1 2.07 1.31 2.36 1.46.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.29.39-.24.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.12.07.7-.17 1.37z"/></symbol>
+</svg>
+
+<header class="hdr" id="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="#top" aria-label="Lima Local Experience, inicio">
+      <span class="mark">JM</span>
+      <span><b>Lima Local Experience</b><small>Privado · Local · Personal</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#catalogo">Servicios</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#reserva">Reservar</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+    <a class="hdr-cta" href="#reserva">Reservar <svg class="i" style="width:16px;height:16px"><use href="#i-arrow"/></svg></a>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero" aria-label="Presentación">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill"><i></i>Lima · Callao · Provincias</span>
+      <h1>Lima, <em>a tu ritmo.</em></h1>
+      <p class="lead">Traslados privados, tours personalizados y experiencias locales para descubrir Lima sin preocuparte por nada.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#reserva">Reservar ahora <svg class="i"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#catalogo">Ver servicios</a>
+      </div>
+      <div class="facts">
+        <div><b>1–4</b><span>pasajeros</span></div>
+        <div><b>2</b><span>maletas incluidas</span></div>
+        <div><b>ES · EN</b><span>atención bilingüe</span></div>
+        <div><b>2026</b><span>vehículo del año</span></div>
+      </div>
+    </div>
+    <div class="poster">
+      <div class="poster-card">
+        <img id="posterImg" src="assets/img/promo-es-sm.webp" width="520" height="780" alt="Descubre Lima con comodidad y estilo. Lima Local Experience" fetchpriority="high" decoding="async">
+      </div>
+      <div class="chip-float cf-1"><span class="ic"><svg class="i"><use href="#i-shield"/></svg></span><span>Licencia A-2B<small>Conducción responsable</small></span></div>
+      <div class="chip-float cf-2"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><span>Español / English<small>Para visitantes</small></span></div>
+      <div class="lang-toggle" role="group" aria-label="Idioma del afiche">
+        <button type="button" data-lang="es" aria-pressed="true">Español</button>
+        <button type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap strip-in">
+    <span><svg class="i"><use href="#i-plane"/></svg>Aeropuerto Jorge Chávez</span>
+    <span><svg class="i"><use href="#i-ship"/></svg>Puerto del Callao</span>
+    <span><svg class="i"><use href="#i-landmark"/></svg>Centro Histórico · Miraflores · Barranco</span>
+    <span><svg class="i"><use href="#i-map"/></svg>Paracas · Ica · Lunahuaná · Caral</span>
+  </div>
+</div>
+
+<!-- CATALOG -->
+<section id="catalogo">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <div class="eyebrow">Servicios y experiencias</div>
+        <h2 class="h2">Elige cómo quieres <em>vivir Lima.</em></h2>
+        <p class="sub">Desde un traslado puntual hasta un día completo con vehículo y chofer privado a tu disposición.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Filtrar servicios" id="tabs"></div>
+    </div>
+    <div class="grid" id="grid" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="como" class="how">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <div class="eyebrow">Cómo funciona</div>
+        <h2 class="h2">Reservar toma <em>un minuto.</em></h2>
+      </div>
+      <p class="sub">Sin apps que descargar ni cuentas que crear. Todo se coordina directamente por WhatsApp.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><span class="ic"><svg class="i"><use href="#i-grid"/></svg></span><h3>Elige tu servicio</h3><p>Traslado, tour, taxi por horas o una experiencia gastronómica.</p></div>
+      <div class="step rv"><span class="ic"><svg class="i"><use href="#i-cal"/></svg></span><h3>Indica fecha y lugar</h3><p>Dinos cuándo, dónde te recogemos y cuántos pasajeros viajan.</p></div>
+      <div class="step rv"><span class="ic"><svg class="i"><use href="#i-chat"/></svg></span><h3>Confirma por WhatsApp</h3><p>Recibes disponibilidad y tarifa exacta. Coordinamos cada detalle contigo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="reserva" class="booking">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <div class="eyebrow">Reserva online</div>
+        <h2 class="h2">Tu viaje empieza <em>aquí.</em></h2>
+      </div>
+      <p class="sub">Completa 3 pasos. Prepararemos el mensaje de WhatsApp listo para enviar y te confirmaremos disponibilidad y tarifa exacta.</p>
+    </div>
+
+    <div class="book">
+      <form class="panel" id="form" novalidate>
+        <div class="progress" role="tablist" aria-label="Pasos de la reserva">
+          <button type="button" class="on" data-go="0"><span>1</span>Servicio</button>
+          <button type="button" data-go="1" disabled><span>2</span>Fecha y lugar</button>
+          <button type="button" data-go="2" disabled><span>3</span>Tus datos</button>
+        </div>
+
+        <div class="pane on" data-pane="0">
+          <h3>¿Qué necesitas?</h3>
+          <p class="hint">Selecciona un servicio. Puedes cambiarlo cuando quieras.</p>
+          <div class="pick-list" id="pickList" role="radiogroup" aria-label="Servicio"></div>
+          <div class="pax">
+            <div><b>Pasajeros</b><small>Hasta 4 personas y 2 maletas</small></div>
+            <div class="stepper">
+              <button type="button" id="paxMinus" aria-label="Menos pasajeros">−</button>
+              <output id="pax" aria-live="polite">1</output>
+              <button type="button" id="paxPlus" aria-label="Más pasajeros">+</button>
+            </div>
+          </div>
+          <div class="nav-row"><span></span><button type="button" class="btn btn-dark" data-next>Continuar <svg class="i"><use href="#i-arrow"/></svg></button></div>
+        </div>
+
+        <div class="pane" data-pane="1">
+          <h3>¿Cuándo y dónde?</h3>
+          <p class="hint">Si aún no tienes la hora exacta, indica una aproximada.</p>
+          <div class="row">
+            <label class="fld"><span>Fecha</span><input id="f_fecha" type="date" required></label>
+            <label class="fld"><span>Hora</span><input id="f_hora" type="time" required></label>
+          </div>
+          <label class="fld"><span>Recojo · dirección u hotel</span><input id="f_origen" required placeholder="Ej. Hotel en Miraflores" autocomplete="street-address"></label>
+          <label class="fld"><span>Destino <small style="font-weight:400;color:var(--muted)">(opcional)</small></span><input id="f_destino" placeholder="Ej. Aeropuerto LIM"></label>
+          <div class="nav-row"><button type="button" class="btn back" data-prev><svg class="i"><use href="#i-left"/></svg>Atrás</button><button type="button" class="btn btn-dark" data-next>Continuar <svg class="i"><use href="#i-arrow"/></svg></button></div>
+        </div>
+
+        <div class="pane" data-pane="2">
+          <h3>Tus datos</h3>
+          <p class="hint">Solo para coordinar tu reserva.</p>
+          <div class="row">
+            <label class="fld"><span>Nombre completo</span><input id="f_nombre" required placeholder="Ej. John Smith" autocomplete="name"></label>
+            <label class="fld"><span>WhatsApp / teléfono</span><input id="f_tel" type="tel" required placeholder="+51 …" autocomplete="tel"></label>
+          </div>
+          <label class="fld"><span>Comentarios <small style="font-weight:400;color:var(--muted)">(opcional)</small></span><textarea id="f_notas" placeholder="Maletas, idioma, paradas, número de vuelo, necesidades especiales…"></textarea></label>
+          <div class="nav-row"><button type="button" class="btn back" data-prev><svg class="i"><use href="#i-left"/></svg>Atrás</button><button type="submit" class="btn btn-wa"><svg class="i" style="fill:#fff;stroke:none"><use href="#i-wa"/></svg>Enviar por WhatsApp</button></div>
+        </div>
+      </form>
+
+      <aside class="summary" aria-live="polite">
+        <div class="media"><img id="sumImg" src="assets/img/aeropuerto.webp" alt="" width="357" height="138" loading="lazy" decoding="async"></div>
+        <div class="sum-body">
+          <div class="eyebrow">Tu reserva</div>
+          <h4 id="sumName">Traslado aeropuerto</h4>
+          <dl>
+            <dt>Pasajeros</dt><dd id="sumPax">1</dd>
+            <dt>Fecha</dt><dd id="sumDate">—</dd>
+            <dt>Recojo</dt><dd id="sumFrom">—</dd>
+            <dt>Destino</dt><dd id="sumTo">—</dd>
+          </dl>
+          <div class="sum-total"><div><small>Tarifa referencial</small><b id="sumPrice">S/ 90–120</b></div><small id="sumUnit" style="color:rgba(255,255,255,.55)">/ vehículo</small></div>
+          <p class="sum-note">La tarifa exacta se confirma por WhatsApp según ruta y horario.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section>
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <div class="eyebrow">La diferencia</div>
+        <h2 class="h2">Pensado para viajar <em>tranquilo.</em></h2>
+      </div>
+    </div>
+    <div class="why-grid">
+      <div class="why rv"><div class="ic"><svg class="i"><use href="#i-car"/></svg></div><b>Privado</b><span>Solo tú y tus acompañantes.</span></div>
+      <div class="why rv"><div class="ic"><svg class="i"><use href="#i-clock"/></svg></div><b>Puntual</b><span>Coordinación previa de cada detalle.</span></div>
+      <div class="why rv"><div class="ic"><svg class="i"><use href="#i-globe"/></svg></div><b>Bilingüe</b><span>Atención en español e inglés.</span></div>
+      <div class="why rv"><div class="ic"><svg class="i"><use href="#i-user"/></svg></div><b>Personal</b><span>Adaptado a tu viaje y horarios.</span></div>
+      <div class="why rv"><div class="ic"><svg class="i"><use href="#i-shield"/></svg></div><b>Seguro</b><span>Conducción responsable, licencia A-2B.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM CTA -->
+<div class="cta">
+  <div class="wrap">
+    <div class="cta-box rv">
+      <div>
+        <div class="eyebrow">Servicio a medida</div>
+        <h2 class="h2">¿Tienes <em>otro plan?</em></h2>
+        <p class="sub">Diseñamos servicios privados para bodas, eventos, noches gastronómicas, aeropuerto ejecutivo, rutas especiales y atención por horas.</p>
+        <div class="tags"><span>Bodas</span><span>Eventos</span><span>Gastronomía</span><span>Aeropuerto ejecutivo</span><span>Rutas personalizadas</span></div>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-wa" id="ctaWa" href="#" target="_blank" rel="noopener"><svg class="i" style="fill:#fff;stroke:none"><use href="#i-wa"/></svg>Cotizar por WhatsApp</a>
+        <a class="btn btn-ghost" href="#reserva" data-service="Servicio exclusivo a medida">Usar el formulario</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section id="faq" class="how">
+  <div class="wrap faq-wrap">
+    <div class="rv">
+      <div class="eyebrow">Preguntas frecuentes</div>
+      <h2 class="h2">Todo claro <em>antes de salir.</em></h2>
+      <p class="sub">¿Otra duda? Escríbenos por WhatsApp y te respondemos directamente.</p>
+    </div>
+    <div class="faq rv">
+      <details open><summary>¿Cuántas personas y maletas entran en el vehículo?</summary><p>Atendemos de 1 a 4 pasajeros, con hasta 2 maletas. Si viajan con más equipaje, indícalo en los comentarios para coordinarlo.</p></details>
+      <details><summary>¿Los precios publicados son finales?</summary><p>Son tarifas referenciales. La tarifa exacta se confirma por WhatsApp según la ruta, el horario y la duración del servicio.</p></details>
+      <details><summary>¿Atienden en inglés?</summary><p>Sí. Atendemos en español e inglés, ideal para visitantes internacionales y pasajeros de cruceros.</p></details>
+      <details><summary>¿Qué zonas cubren?</summary><p>Lima, Callao y provincias cercanas: Paracas, Ica, Lunahuaná, Caral y playas del sur, además del aeropuerto Jorge Chávez y el puerto del Callao.</p></details>
+      <details><summary>¿Cómo confirmo mi reserva?</summary><p>Completa el formulario y se abrirá WhatsApp con tu solicitud preparada. Al enviarla, te confirmamos disponibilidad y tarifa.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div>
+        <a class="brand" href="#top"><span class="mark">JM</span><span><b>Lima Local Experience</b><small>Privado · Local · Personal</small></span></a>
+        <p style="max-width:340px">Traslados privados, tours y experiencias locales en Lima, Callao y provincias. Atendido por Johnny Morant.</p>
+      </div>
+      <div>
+        <h5>Explorar</h5>
+        <a href="#catalogo">Servicios</a><a href="#como">Cómo funciona</a><a href="#reserva">Reservar</a><a href="#faq">Preguntas</a>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <a class="wa-link" href="#" target="_blank" rel="noopener">WhatsApp · +51 902 703 296</a>
+        <a href="#top">Lima · Callao · Provincias</a>
+      </div>
+    </div>
+    <div class="ft-bottom"><span>© <span id="yr">2026</span> Lima Local Experience · Johnny Morant</span><span>Tarifas referenciales en soles (S/)</span></div>
+  </div>
+</footer>
+
+<a class="fab wa-link" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><svg><use href="#i-wa"/></svg></a>
+
+<nav class="tabbar" aria-label="Navegación rápida">
+  <a href="#top" data-sec="top"><svg class="i"><use href="#i-home"/></svg>Inicio</a>
+  <a href="#catalogo" data-sec="catalogo"><svg class="i"><use href="#i-grid"/></svg>Servicios</a>
+  <a href="#reserva" data-sec="reserva"><svg class="i"><use href="#i-cal"/></svg>Reservar</a>
+  <a class="wa wa-link" href="#" target="_blank" rel="noopener"><svg class="i" style="fill:#fff;stroke:none"><use href="#i-wa"/></svg>WhatsApp</a>
+</nav>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Afiche promocional" aria-hidden="true">
+  <div class="modal-in">
+    <button class="x" type="button" data-close aria-label="Cerrar"><svg class="i"><use href="#i-x"/></svg></button>
+    <img id="modalImg" alt="">
+    <div class="modal-actions">
+      <a class="btn btn-wa wa-link" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-gold" href="#reserva" data-close>Reservar</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"><svg class="i"><use href="#i-check"/></svg><span></span></div>
+
+<script>
+(() => {
+"use strict";
+const WA = "51902703296";
+const IMG = "assets/img/";
+const CATS = {tras:"Traslados",tour:"Tours",gast:"Gastronomía",esp:"Especiales"};
+const ICON = {tras:"i-car",tour:"i-map",gast:"i-chef",esp:"i-spark"};
+const S = [
+  {n:"Traslado aeropuerto (LIM)",t:"Traslado aeropuerto",c:"tras",img:"aeropuerto",loc:"Aeropuerto Jorge Chávez",d:"Recojo o traslado desde/hacia el aeropuerto. Hasta 4 pasajeros y 2 maletas.",p:"S/ 90–120",u:"/ vehículo"},
+  {n:"City tour privado",t:"City tour privado",c:"tour",img:"centro-historico",loc:"Centro Histórico de Lima",d:"Centro Histórico, Miraflores, Barranco, San Isidro y Costa Verde.",p:"S/ 280–650",u:"/ tour"},
+  {n:"Taxi VIP por horas",t:"Taxi VIP por horas",c:"tras",img:"miraflores",loc:"Miraflores",d:"Vehículo a tu disposición para reuniones, compras, eventos o recorridos.",p:"S/ 60–80",u:"/ hora · mín. 2 h"},
+  {n:"Full day fuera de Lima",t:"Full day fuera de Lima",c:"tour",img:"paracas",loc:"Paracas · Ica",d:"Paracas, Ica, Lunahuaná, Caral o playas del sur. Viaje privado.",p:"S/ 700–900",u:"/ día"},
+  {n:"Tour gastronómico peruano",t:"Tour gastronómico peruano",c:"gast",img:"gastronomico",loc:"Lima",d:"Ceviche, causa, anticuchos, postres y huariques seleccionados con ruta privada.",p:"S/ 250–400",u:"/ grupo"},
+  {n:"Clase de cocina + mercado",t:"Mercado + clase de cocina",c:"gast",img:"clase-cocina",loc:"Lima",d:"Mercado local y clase práctica para preparar ceviche y pisco sour con un chef.",p:"S/ 200–320",u:"/ persona"},
+  {n:"Ruta del Pisco y bares",t:"Ruta del Pisco & bares",c:"gast",img:"pisco-bares",loc:"Lima",d:"Pisco sour, chilcano y coctelería peruana con chofer privado toda la noche.",p:"S/ 220–350",u:"/ grupo"},
+  {n:"Tour Pachacámac y huacas",t:"Pachacámac & huacas",c:"tour",img:"pachacamac",loc:"Pachacámac",d:"Historia y arqueología peruana en un recorrido privado a tu ritmo.",p:"S/ 280–450",u:"/ tour"},
+  {n:"Traslado puerto del Callao (cruceros)",t:"Traslado puerto del Callao",c:"tras",img:"callao-cruceros",loc:"Puerto del Callao",d:"Para pasajeros de cruceros, con coordinación de horarios y equipaje.",p:"S/ 100–140",u:"/ vehículo"},
+  {n:"Tour de compras y artesanía",t:"Compras & artesanía",c:"tour",img:"compras",loc:"Miraflores",d:"Larcomar, Mercado Indio, Dédalo y otros puntos con chofer y espera incluida.",p:"S/ 60–80",u:"/ hora"},
+  {n:"Entrega / encomienda VIP",t:"Entregas & encomiendas VIP",c:"esp",img:"lima-entregas",loc:"Lima",d:"Envíos urgentes y delicados con seguimiento y entrega en mano.",p:"S/ 40",u:"+ S/ 3 por km"},
+  {n:"Servicio exclusivo a medida",t:"Servicios exclusivos",c:"esp",img:"barranco",loc:"Barranco",d:"Bodas, eventos, noches gastronómicas, aeropuerto ejecutivo y atención por horas.",p:"Cotización",u:"a medida"}
+];
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const waUrl = t => `https://wa.me/${WA}` + (t ? `?text=${encodeURIComponent(t)}` : "");
+
+/* WhatsApp links */
+$$(".wa-link").forEach(a => a.href = waUrl("Hola, quiero información sobre Lima Local Experience."));
+$("#ctaWa").href = waUrl("Hola, quiero cotizar un servicio a medida con Lima Local Experience.");
+$("#yr").textContent = new Date().getFullYear();
+
+/* Catalog */
+const grid = $("#grid"), tabs = $("#tabs");
+grid.innerHTML = S.map((s, i) => `
+  <article class="card rv" data-c="${s.c}">
+    <div class="media"><img src="${IMG}${s.img}.webp" alt="${esc(s.loc)}" width="357" height="138" loading="lazy" decoding="async">
+      <span class="badge"><svg class="i"><use href="#${ICON[s.c]}"/></svg>${CATS[s.c]}</span></div>
+    <div class="body">
+      <span class="loc"><svg class="i"><use href="#i-pin"/></svg>${esc(s.loc)}</span>
+      <h3>${esc(s.t)}</h3>
+      <p>${esc(s.d)}</p>
+      <div class="foot">
+        <div class="price"><small>${s.p === "Cotización" ? "Precio" : "Desde"}</small><b>${esc(s.p)}</b> <i>${esc(s.u)}</i></div>
+        <button class="go" type="button" data-i="${i}">${s.c === "esp" && s.p === "Cotización" ? "Consultar" : "Reservar"}<svg class="i"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </article>`).join("");
+
+const counts = S.reduce((a, s) => (a[s.c] = (a[s.c] || 0) + 1, a), {});
+tabs.innerHTML = [["all","Todos",S.length], ...Object.keys(CATS).map(k => [k, CATS[k], counts[k]])]
+  .map(([k, l, n], j) => `<button class="tab" role="tab" type="button" data-f="${k}" aria-selected="${j === 0}">${l}<sup>${n}</sup></button>`).join("");
+tabs.addEventListener("click", e => {
+  const b = e.target.closest(".tab"); if (!b) return;
+  $$(".tab", tabs).forEach(t => t.setAttribute("aria-selected", t === b));
+  const f = b.dataset.f;
+  $$(".card", grid).forEach(c => {
+    const show = f === "all" || c.dataset.c === f;
+    c.classList.toggle("hide", !show);
+    if (show) { c.classList.add("in"); c.animate?.([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}], {duration:380,easing:"cubic-bezier(.2,.7,.2,1)"}); }
+  });
+});
+
+/* Booking */
+const state = {i:0, pax:1, step:0};
+const pick = $("#pickList");
+pick.innerHTML = S.map((s, i) => `
+  <button type="button" class="opt" role="radio" aria-checked="${i === 0}" data-i="${i}">
+    <img src="${IMG}${s.img}.webp" alt="" width="56" height="42" loading="lazy" decoding="async">
+    <span><b>${esc(s.t)}</b><small>${esc(s.p)} ${esc(s.u)}</small></span>
+  </button>`).join("");
+
+const fmtDate = v => {
+  if (!v) return "—";
+  const d = new Date(v + "T12:00:00");
+  return d.toLocaleDateString("es-PE", {weekday:"short", day:"numeric", month:"short"});
+};
+function sync() {
+  const s = S[state.i];
+  $("#sumName").textContent = s.t;
+  $("#sumPrice").textContent = s.p;
+  $("#sumUnit").textContent = s.u;
+  const img = $("#sumImg"); if (!img.src.endsWith(s.img + ".webp")) img.src = IMG + s.img + ".webp";
+  $("#sumPax").textContent = state.pax + (state.pax === 1 ? " pasajero" : " pasajeros");
+  const h = $("#f_hora").value;
+  $("#sumDate").textContent = fmtDate($("#f_fecha").value) + (h ? " · " + h : "");
+  $("#sumFrom").textContent = $("#f_origen").value.trim() || "—";
+  $("#sumTo").textContent = $("#f_destino").value.trim() || "—";
+  $("#pax").textContent = state.pax;
+  $("#paxMinus").disabled = state.pax <= 1;
+  $("#paxPlus").disabled = state.pax >= 4;
+}
+function choose(i) {
+  state.i = i;
+  $$(".opt", pick).forEach(o => o.setAttribute("aria-checked", +o.dataset.i === i));
+  sync();
+}
+pick.addEventListener("click", e => { const o = e.target.closest(".opt"); if (o) choose(+o.dataset.i); });
+$("#paxMinus").onclick = () => { state.pax = Math.max(1, state.pax - 1); sync(); };
+$("#paxPlus").onclick = () => { state.pax = Math.min(4, state.pax + 1); sync(); };
+$("#form").addEventListener("input", sync);
+
+const today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+$("#f_fecha").min = today.toISOString().slice(0, 10);
+
+const panes = $$(".pane"), steps = $$(".progress button");
+function valid(n) {
+  let ok = true;
+  $$("[required]", panes[n]).forEach(el => {
+    const bad = !el.value.trim();
+    el.classList.toggle("bad", bad);
+    if (bad && ok) { el.focus(); ok = false; }
+  });
+  return ok;
+}
+function go(n) {
+  state.step = n;
+  panes.forEach((p, k) => p.classList.toggle("on", k === n));
+  steps.forEach((b, k) => { b.classList.toggle("on", k === n); b.classList.toggle("done", k < n); if (k <= n) b.disabled = false; });
+  const top = $("#form").getBoundingClientRect().top;
+  if (top < 0) $("#form").scrollIntoView({behavior:"smooth", block:"start"});
+}
+$("#form").addEventListener("click", e => {
+  if (e.target.closest("[data-next]") && valid(state.step)) go(state.step + 1);
+  if (e.target.closest("[data-prev]")) go(state.step - 1);
+  const s = e.target.closest("[data-go]");
+  if (s && !s.disabled) { const n = +s.dataset.go; if (n <= state.step || [...Array(n).keys()].every(valid)) go(n); }
+});
+$("#form").addEventListener("input", e => e.target.classList.remove("bad"));
+$("#form").addEventListener("submit", e => {
+  e.preventDefault();
+  if (!valid(2)) return;
+  const v = id => $("#" + id).value.trim() || "—";
+  const s = S[state.i];
+  const msg = [
+    "*NUEVA RESERVA · LIMA LOCAL EXPERIENCE*", "",
+    `*Servicio:* ${s.n}`,
+    `*Pasajeros:* ${state.pax}`,
+    `*Fecha:* ${v("f_fecha")}`,
+    `*Hora:* ${v("f_hora")}`,
+    `*Recojo:* ${v("f_origen")}`,
+    `*Destino:* ${v("f_destino")}`,
+    `*Nombre:* ${v("f_nombre")}`,
+    `*WhatsApp:* ${v("f_tel")}`,
+    `*Comentarios:* ${v("f_notas")}`
+  ].join("\n");
+  window.open(waUrl(msg), "_blank", "noopener");
+  toast("Abriendo WhatsApp con tu solicitud…");
+});
+
+/* Pick from catalog / CTA -> booking */
+function toBooking(i) {
+  choose(i); go(0);
+  $("#reserva").scrollIntoView({behavior:"smooth", block:"start"});
+  toast(S[i].t + " seleccionado");
+}
+grid.addEventListener("click", e => { const b = e.target.closest(".go"); if (b) toBooking(+b.dataset.i); });
+$$("[data-service]").forEach(a => a.addEventListener("click", e => {
+  e.preventDefault(); toBooking(S.findIndex(s => s.n === a.dataset.service));
+}));
+
+/* Toast */
+let tt;
+function toast(t) {
+  const el = $("#toast"); $("span", el).textContent = t;
+  el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+/* Poster language + modal */
+const POSTER = {es:["promo-es","Descubre Lima con comodidad y estilo. Lima Local Experience"], en:["promo-en","Discover Lima in comfort and style. Lima Local Experience"]};
+let lang = "es";
+$$(".lang-toggle button").forEach(b => b.addEventListener("click", () => {
+  lang = b.dataset.lang;
+  $$(".lang-toggle button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  const img = $("#posterImg"); img.src = IMG + POSTER[lang][0] + "-sm.webp"; img.alt = POSTER[lang][1];
+}));
+const modal = $("#modal");
+$(".poster-card").addEventListener("click", () => {
+  const m = $("#modalImg"); m.src = IMG + POSTER[lang][0] + ".webp"; m.alt = POSTER[lang][1];
+  modal.classList.add("open"); modal.setAttribute("aria-hidden", "false"); $(".x", modal).focus();
+});
+$(".poster-card").style.cursor = "zoom-in";
+const close = () => { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); };
+modal.addEventListener("click", e => { if (e.target === modal || e.target.closest("[data-close]")) close(); });
+addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+/* Header + tab bar state (rAF-throttled) */
+const hdr = $("#hdr"), secs = ["reserva","catalogo"].map(id => document.getElementById(id));
+const tabLinks = $$(".tabbar a[data-sec]");
+let ticking = false;
+function onScroll() {
+  const y = scrollY;
+  hdr.classList.toggle("solid", y > 40);
+  let cur = "top";
+  for (const s of secs) if (s.getBoundingClientRect().top < innerHeight * .45) { cur = s.id; break; }
+  tabLinks.forEach(a => a.classList.toggle("on", a.dataset.sec === cur));
+  ticking = false;
+}
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, {passive:true});
+onScroll();
+
+/* Reveal on scroll */
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+  }), {rootMargin:"0px 0px -8% 0px"});
+  $$(".rv").forEach((el, k) => { el.style.transitionDelay = (k % 3) * 70 + "ms"; io.observe(el); });
+} else $$(".rv").forEach(el => el.classList.add("in"));
+
+sync();
+})();
+</script>
+</body>
+</html>
