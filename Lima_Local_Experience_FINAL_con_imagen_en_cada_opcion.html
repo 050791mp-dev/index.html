@@ -195,6 +195,7 @@ footer{background:#07111e;color:#cdd7e3;padding:45px 0 35px;text-align:center}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
 a img{pointer-events:auto}
+input,textarea,select{-webkit-user-select:text;user-select:text}
 @media print{body{display:none!important}}
 .aviso-copyright{text-align:center;font-size:12px;opacity:.75;padding:14px 16px}
 </style>
@@ -458,9 +459,11 @@ function cerrarPromo(e){
 (function(){
   if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.body.innerHTML=""}}
   var y=document.getElementById("anioCopy");if(y)y.textContent=new Date().getFullYear();
-  var no=function(e){e.preventDefault();return false};
+  var campo=function(e){return e.target&&e.target.closest&&e.target.closest("input,textarea,select,[contenteditable]")};
+  var no=function(e){if(campo(e))return;e.preventDefault();return false};
   ["contextmenu","dragstart","copy","cut","selectstart"].forEach(function(t){document.addEventListener(t,no)});
   document.addEventListener("keydown",function(e){
+    if(campo(e)&&e.key!=="F12")return;
     var k=(e.key||"").toLowerCase(),c=e.ctrlKey||e.metaKey;
     if(e.key==="F12"||(c&&["s","u","p","c","a"].indexOf(k)>-1)||(c&&e.shiftKey&&["i","j","c"].indexOf(k)>-1)){e.preventDefault();return false}
   });
