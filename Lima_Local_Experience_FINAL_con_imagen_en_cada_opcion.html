@@ -189,6 +189,15 @@ footer{background:#07111e;color:#cdd7e3;padding:45px 0 35px;text-align:center}
   .card-img,.exp-visual{height:205px;min-height:205px}
 }
 </style>
+<meta name="robots" content="index, follow, noai, noimageai">
+<meta name="copyright" content="© Lima Local Experience. Todos los derechos reservados.">
+<style id="proteccion">
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
+a img{pointer-events:auto}
+@media print{body{display:none!important}}
+.aviso-copyright{text-align:center;font-size:12px;opacity:.75;padding:14px 16px}
+</style>
 </head>
 <body>
 
@@ -443,6 +452,19 @@ function cerrarPromo(e){
     modal.setAttribute("aria-hidden","true");
   }
 }
+</script>
+<p class="aviso-copyright">© <span id="anioCopy"></span> Lima Local Experience. Todos los derechos reservados. Prohibida la copia, reproducción o clonación total o parcial de este sitio, sus textos e imágenes.</p>
+<script id="muro-seguridad">
+(function(){
+  if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.body.innerHTML=""}}
+  var y=document.getElementById("anioCopy");if(y)y.textContent=new Date().getFullYear();
+  var no=function(e){e.preventDefault();return false};
+  ["contextmenu","dragstart","copy","cut","selectstart"].forEach(function(t){document.addEventListener(t,no)});
+  document.addEventListener("keydown",function(e){
+    var k=(e.key||"").toLowerCase(),c=e.ctrlKey||e.metaKey;
+    if(e.key==="F12"||(c&&["s","u","p","c","a"].indexOf(k)>-1)||(c&&e.shiftKey&&["i","j","c"].indexOf(k)>-1)){e.preventDefault();return false}
+  });
+})();
 </script>
 </body>
 </html>
