@@ -469,5 +469,16 @@ function cerrarPromo(e){
   });
 })();
 </script>
+<script id="contador-visitas">
+/* Contador de visitas GoatCounter: escribir aquí el código de la cuenta (ej. "chefanita") */
+(function(){
+  var CODIGO_GOATCOUNTER="";
+  if(!CODIGO_GOATCOUNTER)return;
+  var g=document.createElement("script");
+  g.async=true;g.src="https://gc.zgo.at/count.js";
+  g.setAttribute("data-goatcounter","https://"+CODIGO_GOATCOUNTER+".goatcounter.com/count");
+  document.body.appendChild(g);
+})();
+</script>
 </body>
 </html>
