@@ -279,12 +279,107 @@ input:focus,textarea:focus,select:focus{border-color:var(--violet);box-shadow:0 
 .thumb{background:linear-gradient(135deg,color-mix(in srgb,var(--mod,var(--violet)) 30%,#fff),color-mix(in srgb,var(--mod2,var(--blue)) 25%,#fff))}
 @media (max-width:980px){.wrap>nav{background:linear-gradient(90deg,#17153B,#2A1F6E)}}
 @media (prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* ===== v5 · Oscuro premium + formato app ===== */
+:root,:root[data-theme="light"],:root[data-theme="dark"]{color-scheme:dark;
+--bg:#0B0F1A;--surface:#141A2B;--surface2:#1B2238;--ink:#EEF1F8;--muted:#9AA3B8;--line:rgba(255,255,255,.08);
+--gold:#E8B85C;--gold2:#F6D58E;--cyan:#4FD1E8;--magenta:#E85C9E;--green:#5CE8A6;--violet:#9C8CFF;
+--accent:#E8B85C;--accent-ink:#1A1405;--soft:#1E2640;--soft2:#2A1E2E;--warn:#FF8A7A;--ok:#5CE8A6;
+--glass:rgba(20,26,43,.82);--glass-b:rgba(255,255,255,.07);--shadow:0 1px 0 rgba(255,255,255,.04) inset,0 20px 44px -22px rgba(0,0,0,.9);
+--grad:linear-gradient(120deg,#F6D58E,#E8B85C 55%,#D99A3A);
+--ex:#FFB3A8;--ex-bg:#3A1F24;--tr:#9FD8FF;--tr-bg:#172A42;--ta:#8EF0C8;--ta-bg:#15332A;--cl:#C9CFDD;--cl-bg:#232A3C;--ev:#E7B8FF;--ev-bg:#2E1F3E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0F1A;--surface:#141A2B;--ink:#EEF1F8;--muted:#9AA3B8;--accent:#E8B85C;--accent-ink:#1A1405;--soft:#1E2640;--glass:rgba(20,26,43,.82);--glass-b:rgba(255,255,255,.07)}}
+body{background:var(--bg);color:var(--ink)}
+body::before{background:radial-gradient(40% 30% at 15% 10%,rgba(232,184,92,.16),transparent 70%),radial-gradient(35% 30% at 85% 20%,rgba(79,209,232,.14),transparent 70%),radial-gradient(40% 35% at 70% 90%,rgba(232,92,158,.12),transparent 70%);opacity:1;filter:blur(20px)}
+h1{background:linear-gradient(100deg,#FFF5DC,var(--gold) 60%,#D99A3A);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2,h3{color:var(--ink)}
+.eyebrow{color:var(--gold)}
+.panel,.stat,.lcard,.note{background:var(--glass);border:1px solid var(--glass-b);box-shadow:var(--shadow)}
+.panel:hover{box-shadow:var(--shadow),0 0 0 1px rgba(232,184,92,.18)}
+.wrap>nav{background:linear-gradient(180deg,#121829,#0E1322);border:1px solid rgba(232,184,92,.14);box-shadow:0 24px 50px -24px #000}
+nav::before{color:var(--gold2);border-bottom-color:rgba(232,184,92,.15)}
+nav button.tab{color:#8E97AD}
+nav button.tab:hover{background:rgba(255,255,255,.05);color:#fff}
+nav button.tab[aria-selected="true"]{background:var(--grad);color:#1A1405;box-shadow:0 10px 26px -12px var(--gold)}
+nav .short{display:none}
+#tab-agenda{--mod:var(--cyan)}#tab-enfoque{--mod:var(--magenta)}#tab-cursos{--mod:var(--gold)}#tab-clases{--mod:var(--cyan)}
+#tab-practicar{--mod:var(--green)}#tab-plan{--mod:var(--gold)}#tab-ia{--mod:var(--violet)}#tab-memoria{--mod:var(--magenta)}
+.banner{background:radial-gradient(520px 260px at 88% 40%,color-mix(in srgb,var(--mod) 38%,transparent),transparent 70%),linear-gradient(135deg,#1B2238,#111626);border:1px solid color-mix(in srgb,var(--mod) 28%,transparent);box-shadow:var(--shadow)}
+.banner::before{background:none}
+.banner h2{color:#fff}.banner p{color:#B7BFD2}.banner .eyebrow{color:var(--mod)}
+.banner .art svg{width:210px}
+.art .f1{fill:var(--mod,var(--gold))}.art .f2{fill:#EEF1F8}.art .f3{fill:var(--gold)}.art .f4{fill:#3A4563}
+.art .s1{stroke:var(--mod,var(--gold))}.art .s2{stroke:var(--gold)}.art .s3{stroke:#8E97AD}
+section .panel>h2:first-child::after{background:var(--mod,var(--gold))}
+.stats .stat:nth-child(1){--c:var(--gold)}.stats .stat:nth-child(2){--c:var(--cyan)}.stats .stat:nth-child(3){--c:var(--magenta)}.stats .stat:nth-child(4){--c:var(--green)}
+.stat::after{background:radial-gradient(circle,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%)}
+.stat .sico{background:color-mix(in srgb,var(--c) 18%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.stat .sico svg{stroke:var(--c)}
+.stat span{color:var(--muted)}
+button{background:var(--surface2);color:var(--ink);border-color:var(--line)}
+button.primary{background:var(--grad);color:#1A1405;border:none;box-shadow:0 12px 28px -14px var(--gold)}
+button.ghost{background:transparent;color:var(--muted)}
+.ahora{background:radial-gradient(400px 200px at 90% 50%,rgba(232,184,92,.35),transparent 70%),linear-gradient(120deg,#6B2447,#3A1830);border:1px solid rgba(232,92,158,.35);box-shadow:0 24px 50px -26px var(--magenta)}
+.ahora .eyebrow{color:#FFB6D5}.ahora .hint{color:#E8C9D8}
+.ahora button.primary{background:var(--grad);color:#1A1405}
+.ahora .art svg{width:88px}
+input,textarea,select{background:#0F1424;color:var(--ink);border-color:rgba(255,255,255,.1)}
+input::placeholder,textarea::placeholder{color:#6E7890}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(232,184,92,.18)}
+.filters button{background:var(--surface2);color:var(--ink)}
+.filters button[aria-pressed="true"]{background:var(--grad);color:#1A1405}
+.item:hover{background:rgba(255,255,255,.04)}
+.fcard{background:radial-gradient(300px 160px at 90% 0%,rgba(92,232,166,.25),transparent 70%),linear-gradient(135deg,#1B2238,#111626);border:1px solid rgba(92,232,166,.3)}
+.fcard .hint{color:var(--green)}
+.clock{background:linear-gradient(100deg,#FFD1E6,var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bar{background:#0F1424}.bar span,#metaFill{background:linear-gradient(90deg,var(--magenta),var(--gold))}
+.kpis div{background:var(--surface2)}
+.week i{background:#2A3350}.week i.ok{background:var(--green)}
+.bubble.me{background:var(--grad);color:#1A1405}.ai{background:var(--surface2)}
+.thumb{width:96px;height:72px;background:radial-gradient(circle at 70% 30%,color-mix(in srgb,var(--mod,var(--gold)) 35%,transparent),transparent 70%),#1B2238;border:1px solid var(--glass-b)}
+.thumb svg{width:78px}
+.fig{background:#fff}
+.hint,label{color:var(--muted)}
+.login{background:radial-gradient(60% 40% at 20% 10%,rgba(232,184,92,.18),transparent 70%),radial-gradient(50% 40% at 90% 90%,rgba(232,92,158,.16),transparent 70%),#0B0F1A}
+.login{margin-inline:-16px;padding-inline:16px}
+.login-art svg{width:100%;max-width:240px;display:block;margin:0 auto}
+.gtab th{color:var(--muted)}
+@media (max-width:980px){
+  .wrap{row-gap:16px;padding-block:14px 110px}
+  header{flex-wrap:nowrap;align-items:center;gap:10px}
+  header .eyebrow{display:none}
+  header h1{font-size:28px}
+  header .logo svg{width:36px;height:36px}
+  header>.row{flex-direction:column;align-items:flex-end;gap:2px;flex:0 0 auto}
+  header>.row>*{flex:0 0 auto}
+  header>.brand{flex:1 1 auto;min-width:0}
+  #hoy{font-size:11px}#whoami{font-size:12px}
+  #btnLogout{min-height:32px;font-size:12px;padding:0 10px}
+  #dbWarn{display:none}
+  .stats{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin-inline:-16px;padding:2px 16px 6px;scrollbar-width:none}
+  .stats::-webkit-scrollbar{display:none}
+  .stat{flex:0 0 132px;scroll-snap-align:start;padding:10px 12px;grid-template-columns:auto 1fr;column-gap:8px;row-gap:0}
+  .stat .sico{grid-row:1 / span 2;width:28px;height:28px}
+  .stat .sico svg{width:16px;height:16px}
+  .stat b{font-size:26px}.stat span{font-size:12px;line-height:1.2}
+  .wrap:has(#tab-agenda[hidden]) .stats{display:none}
+  .banner{padding:18px 20px;border-radius:22px;gap:12px}
+  .banner h2{font-size:28px}.banner p{font-size:14px}
+  .banner .art svg{width:120px}
+  .ahora{padding:18px}.ahora h2{font-size:24px}.ahora .art{display:none}
+  .panel{padding:18px;border-radius:20px}
+  .wrap>nav{border-radius:24px 24px 0 0;border-bottom:none;padding-inline:6px;justify-content:space-between}
+  nav button.tab{min-width:0;flex:1 0 64px;font-size:11px}
+  nav .full{display:none}nav .short{display:inline}
+  nav button.tab[aria-selected="true"]{border-radius:16px}
+}
 </style>
 
 </head>
 <body>
 <div id="login" class="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
   <div class="lcard">
+    <div class="login-art" aria-hidden="true"><svg viewBox="0 0 240 150"><defs><linearGradient id="lg1" x1="0" x2="1"><stop offset="0" stop-color="#F6D58E"/><stop offset="1" stop-color="#E8B85C"/></linearGradient></defs><circle cx="120" cy="80" r="62" fill="#1B2238" stroke="rgba(232,184,92,.35)"/><path d="M120 44c-18-10-40-11-56-7v70c16-4 38-3 56 7z" fill="#EEF1F8"/><path d="M120 44c18-10 40-11 56-7v70c-16-4-38-3-56 7z" fill="#C9D2EA"/><path d="M120 44v70" stroke="url(#lg1)" stroke-width="3"/><path d="M76 58h32M76 70h32M132 58h32M132 70h26" stroke="#8E97AD" stroke-width="3" stroke-linecap="round"/><path d="M196 22l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#E8B85C"/><path d="M44 30l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#4FD1E8"/><circle cx="200" cy="118" r="7" fill="#E85C9E"/></svg></div>
     <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 40 40" width="40" height="40"><rect width="40" height="40" rx="11" class="lg-bg"/><path d="M13 9c0 8 14 14 14 22M27 9c0 8-14 14-14 22" class="lg-s"/><path d="M15 14h10M14 20h12M15 26h10" class="lg-s2"/></svg></span><div><div class="eyebrow">Acceso privado</div><h1 id="loginTitle" style="font-size:30px">Gestor de Carrera</h1></div></div>
     <form id="fLogin" class="stack" style="gap:10px" hidden>
       <label for="lUser">Usuario</label><select id="lUser"></select>
@@ -1033,7 +1128,7 @@ function renderEnfoque() {
 function renderAhora() {
   const it = sorted().find(x => !x.hecho && dias(x) >= 0);
   const hoy = (S.enf[iso(hoy0())] || {}).min || 0, meta = +$('#meta').value || 120;
-  $('#ahora').innerHTML = it ? `<div style="flex:1 1 260px"><div class="eyebrow">Ahora te toca</div><h2>${esc(it.desc)}</h2><div class="hint">${esc(it.curso)} · ${dias(it) === 0 ? 'es HOY' : dias(it) === 1 ? 'es mañana' : 'faltan ' + dias(it) + ' días'} · llevas ${hoy} de ${meta} min hoy</div></div><button class="primary" id="goFocus" style="flex:0 0 auto">Empezar 25 min ahora</button>`
+  $('#ahora').innerHTML = it ? `<span class="art" aria-hidden="true">${typeof ART !== 'undefined' ? ART.enfoque : ''}</span><div style="flex:1 1 260px"><div class="eyebrow">Ahora te toca</div><h2>${esc(it.desc)}</h2><div class="hint">${esc(it.curso)} · ${dias(it) === 0 ? 'es HOY' : dias(it) === 1 ? 'es mañana' : 'faltan ' + dias(it) + ' días'} · llevas ${hoy} de ${meta} min hoy</div></div><button class="primary" id="goFocus" style="flex:0 0 auto">Empezar 25 min ahora</button>`
     : `<div><div class="eyebrow">Ahora te toca</div><h2>Nada pendiente. Buen trabajo.</h2></div>`;
 }
 $('#ahora').onclick = e => { if (!e.target.closest('#goFocus')) return; document.querySelector('[data-tab="enfoque"]').click(); const it = sorted().find(x => !x.hecho && dias(x) >= 0); renderEnfoque(); if (it) { const o = [...$('#fTarea').options].find(o => o.value.includes(it.desc)); if (o) $('#fTarea').value = o.value; } $('#btnFocus').click(); };
@@ -1253,7 +1348,8 @@ document.querySelector('[data-tab="practicar"]').addEventListener('click', () =>
 
 /* ---------- íconos del menú ---------- */
 (() => { const I = { agenda: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>', enfoque: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>', cursos: '<path d="M4 5h6v15H4zM10 5h6v15h-6zM16 7l4-1 2 14-4 1z"/>', clases: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>', practicar: '<rect x="4" y="3" width="14" height="18" rx="3"/><path d="M8 8h6M8 12h6M8 16h3"/>', plan: '<path d="M4 20c6 0 4-8 10-8s4-8 6-8"/><circle cx="4" cy="20" r="1.6"/><circle cx="20" cy="4" r="1.6"/>', ia: '<path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 15l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>', memoria: '<rect x="3" y="4" width="18" height="5" rx="2"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/>' };
-document.querySelectorAll('nav button.tab').forEach(b => { const k = b.dataset.tab; if (I[k] && !b.querySelector('svg')) b.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`); }); })();
+const SH = { agenda: 'Agenda', enfoque: 'Enfoque', cursos: 'Cursos', clases: 'Clases', practicar: 'Practicar', plan: 'Plan', ia: 'IA', memoria: 'Memoria' };
+document.querySelectorAll('nav button.tab').forEach(b => { const k = b.dataset.tab; if (I[k] && !b.querySelector('svg')) { const t = b.textContent.trim(); b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg><span class="full">${t}</span><span class="short">${SH[k] || t}</span>`; } }); })();
 /* ---------- boot ---------- */
 render(); renderNotas(); renderPlan(); renderChat(); renderEnfoque();
 (async () => {
