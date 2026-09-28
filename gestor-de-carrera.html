@@ -223,6 +223,62 @@ section{animation:rise .35s ease both}
   header .brand .logo{display:block}
 }
 @media (prefers-reduced-motion:reduce){section{animation:none}.stat:hover{transform:none}}
+
+/* ===== v4 · Aurora vibrante ===== */
+:root{--indigo:#17153B;--violet:#6D5BFF;--blue:#2E8BFF;--teal:#20C9B0;--coral:#FF6B5B;--amber:#FFB547;--green:#2BD8A0;
+--bg:#F4F2FF;--surface:rgba(255,255,255,.72);--ink:#17153B;--muted:#5B5880;--line:rgba(109,91,255,.16);--accent:#6D5BFF;--accent-ink:#fff;--soft:#ECE8FF;--accent2:#FF6B5B;--soft2:#FFE6E2;--mint:#7FE7D5;
+--glass:rgba(255,255,255,.72);--glass-b:rgba(255,255,255,.65);--shadow:0 1px 2px rgba(23,21,59,.06),0 18px 40px -18px rgba(46,20,140,.35);--grad:linear-gradient(120deg,var(--violet),var(--blue))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C0B22;--surface:rgba(30,27,72,.62);--ink:#F1EFFF;--muted:#B3AEDB;--line:rgba(160,150,255,.18);--accent:#8F80FF;--accent-ink:#fff;--soft:#241F5C;--soft2:#40202A;--glass:rgba(30,27,72,.62);--glass-b:rgba(160,150,255,.18);--shadow:0 1px 2px rgba(0,0,0,.5),0 18px 40px -18px rgba(0,0,0,.8)}}
+:root[data-theme="dark"]{--bg:#0C0B22;--surface:rgba(30,27,72,.62);--ink:#F1EFFF;--muted:#B3AEDB;--line:rgba(160,150,255,.18);--accent:#8F80FF;--accent-ink:#fff;--soft:#241F5C;--soft2:#40202A;--glass:rgba(30,27,72,.62);--glass-b:rgba(160,150,255,.18);--shadow:0 1px 2px rgba(0,0,0,.5),0 18px 40px -18px rgba(0,0,0,.8)}
+body{background:var(--bg);background-image:none}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:
+ radial-gradient(40% 35% at 20% 20%,color-mix(in srgb,var(--violet) 55%,transparent),transparent 70%),
+ radial-gradient(38% 32% at 80% 25%,color-mix(in srgb,var(--blue) 45%,transparent),transparent 70%),
+ radial-gradient(42% 38% at 60% 85%,color-mix(in srgb,var(--teal) 45%,transparent),transparent 70%),
+ radial-gradient(30% 25% at 10% 90%,color-mix(in srgb,var(--coral) 25%,transparent),transparent 70%);
+ filter:blur(30px);opacity:.55;animation:aurora 30s ease-in-out infinite alternate}
+@keyframes aurora{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(3%,-2%) rotate(6deg)}100%{transform:translate(-3%,2%) rotate(-4deg)}}
+.panel,.stat,.lcard,.note{background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--glass-b)}
+.note{background:color-mix(in srgb,var(--glass) 70%,transparent)}
+.wrap>nav{background:linear-gradient(170deg,#17153B 0%,#2A1F6E 60%,#3B2A9A 100%);box-shadow:0 20px 50px -20px rgba(46,20,140,.7)}
+nav button.tab{color:rgba(255,255,255,.7)}
+nav button.tab:hover{background:rgba(255,255,255,.1)}
+nav button.tab[aria-selected="true"]{background:var(--grad);color:#fff;box-shadow:0 10px 24px -10px var(--blue)}
+.eyebrow{color:var(--violet)}
+h1{background:linear-gradient(100deg,var(--indigo),var(--violet) 55%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+#tab-agenda{--mod:var(--blue);--mod2:var(--violet)}#tab-enfoque{--mod:var(--coral);--mod2:var(--amber)}#tab-cursos{--mod:var(--violet);--mod2:#B25BFF}
+#tab-clases{--mod:var(--teal);--mod2:var(--blue)}#tab-practicar{--mod:var(--green);--mod2:var(--teal)}#tab-plan{--mod:var(--amber);--mod2:var(--coral)}
+#tab-ia{--mod:var(--violet);--mod2:var(--teal)}#tab-memoria{--mod:var(--indigo);--mod2:var(--violet)}
+.banner{background:linear-gradient(125deg,var(--mod,var(--violet)),var(--mod2,var(--blue)));box-shadow:0 24px 50px -24px var(--mod,var(--violet))}
+.banner::before{background:radial-gradient(420px 220px at 85% 10%,rgba(255,255,255,.35),transparent 70%)}
+.banner .eyebrow{color:rgba(255,255,255,.85)}
+.art .f1{fill:var(--indigo)}.art .f3{fill:var(--amber)}.art .s1{stroke:#fff}.art .s2{stroke:var(--amber)}.art .s3{stroke:rgba(255,255,255,.75)}
+section .panel>h2:first-child,section .panel>.row:first-child h2{position:relative;padding-bottom:6px}
+section .panel>h2:first-child::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--mod,var(--violet)),var(--mod2,var(--blue)))}
+.stats .stat:nth-child(1){--c:var(--violet)}.stats .stat:nth-child(2){--c:var(--blue)}.stats .stat:nth-child(3){--c:var(--coral)}.stats .stat:nth-child(4){--c:var(--amber)}
+.stat::after{background:radial-gradient(circle,color-mix(in srgb,var(--c) 35%,transparent),transparent 70%);opacity:1}
+.stat .sico{background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 60%,#fff))}
+.stat .sico svg{stroke:#fff}
+.stat b{color:var(--c)!important}
+button.primary{background:var(--grad);border:none;color:#fff;box-shadow:0 12px 26px -12px var(--violet)}
+button.primary:hover{filter:brightness(1.1) saturate(1.1);box-shadow:0 14px 30px -10px var(--blue)}
+.ahora{background:linear-gradient(115deg,var(--coral),var(--amber));box-shadow:0 22px 44px -22px var(--coral)}
+.ahora button.primary{background:#fff;color:#D2452F}
+.filters button[aria-pressed="true"]{background:var(--grad);color:#fff}
+.item:hover{background:color-mix(in srgb,var(--soft) 60%,transparent)}
+.fcard{background:linear-gradient(135deg,var(--indigo),var(--violet))}
+.fcard .hint{color:#C9C0FF}
+.clock{background:linear-gradient(100deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bar span,#metaFill{background:linear-gradient(90deg,var(--coral),var(--amber))}
+.week i.ok{background:var(--green)}.week i{background:color-mix(in srgb,var(--violet) 25%,transparent)}
+.kpis div{background:color-mix(in srgb,var(--soft) 70%,transparent)}
+.bubble.me{background:var(--grad)}
+input:focus,textarea:focus,select:focus{border-color:var(--violet);box-shadow:0 0 0 4px color-mix(in srgb,var(--violet) 20%,transparent)}
+.login{background:transparent}
+.login h1{font-size:40px}
+.thumb{background:linear-gradient(135deg,color-mix(in srgb,var(--mod,var(--violet)) 30%,#fff),color-mix(in srgb,var(--mod2,var(--blue)) 25%,#fff))}
+@media (max-width:980px){.wrap>nav{background:linear-gradient(90deg,#17153B,#2A1F6E)}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
 </style>
 
 </head>
