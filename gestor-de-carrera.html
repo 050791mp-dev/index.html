@@ -421,7 +421,16 @@ async function seal(obj, key, salt, user) {
   return { app: 'gestor-de-carrera', v: 2, user, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
 }
 async function open(r, key) { return JSON.parse(dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(r.iv) }, key, unb64(r.ct)))); }
-async function flush() { clearTimeout(V.t); if (!V.key) return; localStorage.setItem('gc-user-' + V.user, JSON.stringify(await seal(V.data, V.key, V.salt, V.user))); }
+let gen = 0;
+async function flush() {
+  clearTimeout(V.t); if (!V.key) return;
+  const g = ++gen, txt = JSON.stringify(await seal(V.data, V.key, V.salt, V.user));
+  if (g !== gen) return;
+  try { localStorage.setItem('gc-user-' + V.user, txt); }
+  catch (e) { alert('No hay espacio para guardar en este dispositivo. Exporta un respaldo y borra clases muy largas.'); throw e; }
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) flush().catch(() => {}); });
+window.addEventListener('pagehide', () => { flush().catch(() => {}); });
 window.LS = { get(k, d) { return k in V.data ? V.data[k] : d; }, set(k, v) { V.data[k] = v; clearTimeout(V.t); V.t = setTimeout(flush, 400); } };
 window.VAULT = {
   get user() { return V.user; }, get primero() { return V.primero; }, flush,
@@ -436,19 +445,23 @@ function vista() {
   $('#lUser').innerHTML = us.map(u => `<option>${u.replace(/[<>&"]/g, '')}</option>`).join('');
 }
 async function entrar(user, pw, data, salt, key) {
+  if (V.key) return;
   Object.assign(V, { user, pw, salt, key, data }); await flush();
   $('#login').remove(); $('#app').hidden = false; $('#whoami').textContent = user;
   let idle; const lock = () => { clearTimeout(idle); idle = setTimeout(() => window.VAULT.salir(), 20 * 60 * 1000); };
+  window.VAULT.touch = lock;
   ['click', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, lock, { passive: true })); lock();
   window.__startApp();
 }
 $('#goCrear').onclick = () => { $('#fLogin').hidden = true; $('#fCrear').hidden = false; msg(''); };
 $('#goLogin').onclick = () => { $('#fLogin').hidden = false; $('#fCrear').hidden = true; msg(''); };
+let busy = false;
 $('#fCrear').onsubmit = async e => {
   e.preventDefault();
   const u = $('#cUser').value.trim(), p = $('#cPass').value;
   if (p !== $('#cPass2').value) return msg('Las contraseñas no coinciden.');
   const us = users(); if (us.includes(u)) return msg('Ese usuario ya existe en este dispositivo.');
+  if (busy) return; busy = true; $('#btnCrear').disabled = true;
   msg('Creando cuenta cifrada…');
   V.primero = !us.length;
   const salt = crypto.getRandomValues(new Uint8Array(16)), key = await derive(p, salt);
@@ -457,15 +470,17 @@ $('#fCrear').onsubmit = async e => {
 $('#fLogin').onsubmit = async e => {
   e.preventDefault();
   const u = $('#lUser').value, r = rec(u); if (!r) return msg('No se encontró esa cuenta.');
+  if (busy) return; busy = true; $('#btnLogin').disabled = true;
   msg('Abriendo…');
   try { const salt = unb64(r.salt), key = await derive($('#lPass').value, salt); const data = await open(r, key); await entrar(u, $('#lPass').value, data, salt, key); }
-  catch (err) { msg('Contraseña incorrecta.'); $('#lPass').select(); }
+  catch (err) { msg('Contraseña incorrecta.'); $('#lPass').select(); busy = false; $('#btnLogin').disabled = false; }
 };
 $('#lImp').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
     const r = JSON.parse(await f.text());
     if (r.app !== 'gestor-de-carrera' || !r.ct || !r.user) throw 0;
+    if (localStorage.getItem('gc-user-' + r.user) && !confirm('Ya existe la cuenta "' + r.user + '" en este dispositivo. ¿Reemplazar sus datos con este respaldo?')) { msg('Importación cancelada.'); e.target.value = ''; return; }
     localStorage.setItem('gc-user-' + r.user, JSON.stringify(r));
     const us = users(); if (!us.includes(r.user)) setUsers(us.concat(r.user));
     vista(); $('#lUser').value = r.user; msg('Cuenta "' + r.user + '" importada. Entra con su contraseña.');
@@ -710,6 +725,7 @@ function renderCursos() {
 $('#tab-cursos').onclick = async e => {
   const b = e.target.closest('[data-cc]'); if (b) { S.curso = b.dataset.cc; renderCursos(); return; }
   if (e.target.id === 'btnCompAdd' || e.target.id === 'btnCompSave' || e.target.closest('[data-cdel]')) { await guardarComp(e); return; }
+  if (e.target.id === 'btnFicha') { await guardarComp(e); const m = $('#msgFicha'); if (m) m.textContent = 'Ficha guardada.'; return; }
   if (e.target.id === 'btnFicha') { await store.setFicha(slug(S.curso), { ...(S.fichas[slug(S.curso)] || {}), curso: S.curso, info: $('#ficha').value }); const m = $('#msgFicha'); if (m) m.textContent = 'Ficha guardada.'; }
   const d = e.target.closest('[data-dn]'); if (d) store.delNota(d.dataset.dn);
 };
@@ -898,7 +914,7 @@ async function guardarSesion(min, distr) {
   renderEnfoque();
 }
 function tick() {
-  F.left = Math.round((F.end - Date.now()) / 1000); drawClock();
+  F.left = Math.round((F.end - Date.now()) / 1000); window.VAULT?.touch?.(); drawClock();
   if (F.left <= 0) finFoco(true);
 }
 async function iniciar() {
@@ -1016,7 +1032,7 @@ function notasHTML(f) {
   const comp = f.comp || [], meta = f.meta ?? 90, r = calcNotas(comp, meta);
   let veredicto = 'Agrega las evaluaciones del curso con su peso (%) y tu nota (%) cuando la tengas.';
   if (comp.length && r.R === 0 && r.prom != null) veredicto = `Curso completo: nota final ${r.prom.toFixed(1)} %.`;
-  else if (r.nec != null && r.W > 0) veredicto = r.nec <= 0 ? `Ya aseguraste tu meta de ${meta} % aunque saques 0 en lo que falta.` : r.nec > 100 ? `Con lo que falta (${r.R} %) ya no alcanzas ${meta} %. Máximo posible: ${(r.ac + r.R).toFixed(1)} %.` : `Para llegar a ${meta} % necesitas en promedio <b>${r.nec.toFixed(1)} %</b> en lo que falta (${r.R} % del curso).`;
+  else if (r.nec != null && r.W > 0) veredicto = r.nec <= 0 ? `Ya aseguraste tu meta de ${meta} % aunque saques 0 en lo que falta.` : r.nec > 100 ? `Con lo que falta (${r.R} %) ya no alcanzas ${meta} %. Máximo posible: ${((r.ac + r.R) / r.tot * 100).toFixed(1)} %.` : `Para llegar a ${meta} % necesitas en promedio <b>${r.nec.toFixed(1)} %</b> en lo que falta (${r.R} % del curso).`;
   return `<div class="panel"><h2>Notas y promedio</h2>
     <div class="kpis"><div><b>${r.prom == null ? '—' : r.prom.toFixed(1) + '%'}</b><span>promedio actual</span></div><div><b>${r.W}%</b><span>del curso calificado</span></div><div><b>${r.tot}%</b><span>peso total cargado</span></div></div>
     <p style="margin:0">${veredicto}</p>
@@ -1032,6 +1048,7 @@ async function guardarComp(e) {
   const comp = [...document.querySelectorAll('#cursoBody [data-cn]')].map(el => { const i = el.dataset.cn; const v = document.querySelector(`#cursoBody [data-cv="${i}"]`).value; return { nombre: el.value.trim() || 'Evaluación', peso: +document.querySelector(`#cursoBody [data-cp="${i}"]`).value || 0, nota: v === '' ? null : +v }; });
   const del = e.target.closest('[data-cdel]'); if (del) comp.splice(+del.dataset.cdel, 1);
   if (e.target.id === 'btnCompAdd') comp.push({ nombre: '', peso: 0, nota: null });
+  const fi = $('#ficha'); if (fi) f.info = fi.value;
   f.comp = comp; f.meta = +$('#cMeta').value || 90; f.curso = S.curso;
   await store.setFicha(k, f); renderCursos();
 }
@@ -1070,6 +1087,7 @@ $('#fcCurso').onchange = () => { fcShown = false; renderFC(); };
 let SM = null;
 function renderHist() { const h = LS.get('sims', []); $('#smHist').innerHTML = h.length ? h.slice(-8).reverse().map(x => `${esc(x.fecha)} · ${esc(x.curso)} · <b>${x.ok}/${x.n}</b> (${Math.round(x.ok / x.n * 100)} %)`).join('<br>') : 'Aún no hiciste simulacros.'; }
 $('#smStart').onclick = async () => {
+  if (SM) { clearInterval(SM.t); SM = null; }
   const curso = $('#smCurso').value, n = +$('#smN').value, min = +$('#smMin').value;
   const ns = S.notas.filter(x => x.curso === curso && x.resumen);
   if (!ns.length) { $('#smMsg').textContent = 'Este curso no tiene clases resumidas todavía.'; return; }
@@ -1078,7 +1096,7 @@ $('#smStart').onclick = async () => {
   $('#smStart').disabled = true; $('#smMsg').textContent = 'Creando tu simulacro… (hasta un minuto)'; $('#smBody').innerHTML = '';
   try {
     const r = await sample.json(`Eres profesor experto de "${curso}". Crea un simulacro de examen de ${n} preguntas de opción múltiple (4 opciones, una correcta), de dificultad media-alta, mezclando concepto y aplicación, basadas SOLO en este material de clase. Devuelve SOLO JSON: {"preguntas":[{"pregunta":string,"opciones":[string,string,string,string],"correcta":0-3,"explicacion":string}]}\n\nMATERIAL:\n${mat}`, { modelTier: 'default' });
-    const qs = (r && r.preguntas || []).filter(q => q && Array.isArray(q.opciones) && q.opciones.length === 4 && q.correcta >= 0 && q.correcta <= 3);
+    const qs = (r && r.preguntas || []).map(q => q && { ...q, correcta: +q.correcta }).filter(q => q && Array.isArray(q.opciones) && q.opciones.length === 4 && Number.isInteger(q.correcta) && q.correcta >= 0 && q.correcta <= 3);
     if (!qs.length) throw { code: 'invalid_json' };
     SM = { curso, qs, end: Date.now() + min * 60000, t: null };
     $('#smBody').innerHTML = `<div class="big mono" id="smClock"></div>` + qs.map((q, i) => `<fieldset class="qz" style="border:none;margin:0"><legend><b>${i + 1}.</b> ${esc(q.pregunta)}</legend>${q.opciones.map((o, j) => `<label><input type="radio" name="q${i}" value="${j}"> ${esc(o)}</label>`).join('')}<div class="res" data-res="${i}"></div></fieldset>`).join('') + '<button class="primary" id="smFin">Terminar y calificar</button>';
