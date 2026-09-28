@@ -1,0 +1,37 @@
+name: Publicar Gestor de Carrera en Netlify
+
+on:
+  push:
+    branches: [main]
+    paths: ["gestor-de-carrera-site/**", ".github/workflows/deploy-gestor.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-gestor
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gestor-de-carrera-site
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Revisar la llave
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "::error::Falta el secreto NETLIFY_AUTH_TOKEN en GitHub (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+      - run: npm install --no-audit --no-fund
+      - name: Publicar
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 3a710c12-7223-4c0f-8b2b-6e4ddd24fd8e
+        run: npx -y netlify-cli@latest deploy --prod --dir public --functions netlify/functions --message "GitHub ${{ github.sha }}"
