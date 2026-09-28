@@ -1396,5 +1396,37 @@ render(); renderNotas(); renderPlan(); renderChat(); renderEnfoque();
   setInterval(() => { const u = window.VAULT && window.VAULT.user; if (u && u !== visto) { visto = u; log('inicio de sesión', u); } flush(); }, 5000);
 })();
 </script>
+<script>
+/* ---------- configuración de la administradora ---------- */
+(() => {
+  let C = null, u0 = undefined;
+  const css = document.createElement('style');
+  css.textContent = '#anuncioAdm{margin:10px 0;padding:12px 16px;border-radius:14px;background:linear-gradient(120deg,rgba(246,213,142,.16),rgba(232,184,92,.08));border:1px solid rgba(232,184,92,.45);color:inherit;font-weight:600}#bloqAdm{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;background:#0B0F1A;color:#EEF1F8;text-align:center;font:600 18px/1.5 Manrope,system-ui,sans-serif}';
+  document.head.appendChild(css);
+  const aplicar = () => {
+    if (!C) return;
+    const h1 = document.querySelector('header h1'); if (h1 && C.nombre) h1.textContent = C.nombre;
+    let a = document.getElementById('anuncioAdm');
+    if (C.anuncio) {
+      if (!a) { a = document.createElement('div'); a.id = 'anuncioAdm'; a.setAttribute('role', 'status'); const hd = document.querySelector('header'); hd && hd.after(a); }
+      a.textContent = C.anuncio;
+    } else if (a) a.remove();
+    const oc = C.ocultos || [];
+    document.querySelectorAll('nav button.tab').forEach(b => { b.hidden = oc.includes(b.dataset.tab); });
+    const sel = document.querySelector('nav button.tab[aria-selected="true"]');
+    if (sel && sel.hidden) { const v = document.querySelector('nav button.tab:not([hidden])'); v && v.click(); }
+    let bq = document.getElementById('bloqAdm');
+    if (C.bloqueado && !bq) { bq = document.createElement('div'); bq.id = 'bloqAdm'; bq.innerHTML = '<div>Acceso bloqueado por la administradora.<br><span style="opacity:.7;font-weight:400;font-size:15px">Si crees que es un error, comunícate con ella.</span></div>'; document.body.appendChild(bq); }
+    else if (!C.bloqueado && bq) bq.remove();
+  };
+  const cargar = async () => {
+    const u = (window.VAULT && window.VAULT.user) || '';
+    try { const r = await fetch('/api/config' + (u ? '?u=' + encodeURIComponent(u) : ''), { cache: 'no-store' }); if (r.ok) { C = await r.json(); aplicar(); } } catch (e) {}
+  };
+  cargar();
+  setInterval(() => { const u = (window.VAULT && window.VAULT.user) || ''; if (u !== u0) { u0 = u; cargar(); } }, 3000);
+  setInterval(cargar, 120000);
+})();
+</script>
 </body>
 </html>

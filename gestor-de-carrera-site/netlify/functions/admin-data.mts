@@ -24,7 +24,8 @@ export default async (req: Request, _context: Context) => {
     lotes.forEach((l) => Array.isArray(l) && eventos.push(...l));
   }
   eventos.sort((a, b) => (a.ts < b.ts ? 1 : -1));
-  return Response.json({ usuarios, eventos: eventos.slice(0, 3000) });
+  const cfg = (await store("config").get("app", { type: "json" })) || { nombre: "", anuncio: "", ocultos: [], bloqueados: [] };
+  return Response.json({ usuarios, eventos: eventos.slice(0, 3000), config: cfg });
 };
 
 export const config: Config = { path: "/api/admin" };

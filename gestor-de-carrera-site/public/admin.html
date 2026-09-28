@@ -18,7 +18,18 @@ button{background:linear-gradient(120deg,#F6D58E,#E8B85C);color:#1A1405;font-wei
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .kpis div{background:var(--s2);border-radius:14px;padding:12px}.kpis b{display:block;font:400 34px 'Instrument Serif',serif;color:var(--gold)}.kpis span{color:var(--mu);font-size:13px}
 .tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mu);font-weight:600;position:sticky;top:0;background:var(--s)}
-.mu{color:var(--mu)}.err{color:#FF8A7A}
+.mu{color:var(--mu)}.err{color:#FF8A7A}.ok{color:#7ED9B0}
+.bars{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:18px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;min-width:0}
+.bars i{display:block;width:100%;background:linear-gradient(180deg,#F6D58E,#B8862E);border-radius:6px 6px 2px 2px;min-height:2px}
+.bars small{color:var(--mu);font-size:10px;white-space:nowrap}.bars em{font-style:normal;font-size:11px;color:var(--ink)}
+.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold);min-height:34px;padding:0 10px;font-size:13px}
+.ghost.red{color:#FF8A7A;border-color:#FF8A7A}
+textarea{font:inherit;width:100%;min-height:80px;border-radius:12px;border:1px solid var(--line);background:#0F1424;color:var(--ink);padding:10px 12px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}.checks label{display:flex;gap:6px;align-items:center;background:var(--s2);border-radius:10px;padding:8px 12px;cursor:pointer}
+.checks input{min-height:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;background:#3a1d1d;color:#FF8A7A}
 </style>
 </head>
 <body>
@@ -35,6 +46,25 @@ button{background:linear-gradient(120deg,#F6D58E,#E8B85C);color:#1A1405;font-wei
   </form>
   <div id="out" hidden class="wrap" style="padding:0">
     <div class="kpis" id="kpis"></div>
+    <div class="card"><h2>Movimientos por día</h2><div class="bars" id="bars"></div></div>
+    <div class="grid2">
+      <form class="card" id="fCfg" style="display:flex;flex-direction:column;gap:12px">
+        <h2>Configuración de la app</h2>
+        <label for="cNombre" class="mu">Nombre visible de la app</label>
+        <input id="cNombre" maxlength="60" placeholder="Gestor de Carrera">
+        <label for="cAnuncio" class="mu">Anuncio para todos los usuarios (vacío = sin anuncio)</label>
+        <textarea id="cAnuncio" maxlength="280"></textarea>
+        <span class="mu">Módulos ocultos para los usuarios</span>
+        <div class="checks" id="cOcultos"></div>
+        <div class="row"><button>Guardar configuración</button><span id="cMsg" aria-live="polite"></span></div>
+      </form>
+      <div class="card" style="display:flex;flex-direction:column;gap:12px">
+        <h2>Exportar</h2>
+        <p class="mu" style="margin:0">Descarga el registro cargado (según los días elegidos arriba).</p>
+        <div class="row"><button type="button" id="json">Todo en JSON</button><button type="button" id="csv2">Movimientos en CSV</button></div>
+        <p class="mu" style="margin:0;font-size:13px">Los apuntes, agendas y notas de cada usuario están cifrados en su propio dispositivo: ni este panel ni nadie más puede leerlos.</p>
+      </div>
+    </div>
     <div class="card"><h2>Usuarios</h2><div class="tbl"><table id="tU"></table></div></div>
     <div class="card">
       <div class="row" style="justify-content:space-between"><h2>Movimientos</h2>
@@ -46,13 +76,25 @@ button{background:linear-gradient(120deg,#F6D58E,#E8B85C);color:#1A1405;font-wei
 <script>
 const $ = s => document.querySelector(s), esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let D = null;
+const MODS = { agenda: 'Agenda', enfoque: 'Enfoque', cursos: 'Mis cursos', clases: 'Clases', practicar: 'Practicar', plan: 'Plan', ia: 'IA', memoria: 'Memoria' };
+const pass = () => $('#pass').value;
+async function guardar(cambios) {
+  const r = await fetch('/api/config', { method: 'POST', headers: { 'x-admin-pass': pass(), 'content-type': 'application/json' }, body: JSON.stringify(cambios) });
+  if (!r.ok) throw new Error(r.status === 401 ? 'Contraseña incorrecta.' : 'No se pudo guardar.');
+  D.config = await r.json(); return D.config;
+}
+function bajar(nombre, tipo, texto) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([texto], { type: tipo })); a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); }
 const fecha = t => t ? new Date(t).toLocaleString('es-PE') : '';
 const disp = ua => !ua ? '' : /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Mac/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows' : 'Otro';
 function pintar() {
   const u = $('#fU').value, ev = D.eventos.filter(e => !u || (u === '(sin sesión)' ? !e.user : e.user === u));
   const ses = new Set(D.eventos.map(e => e.sid)).size;
   $('#kpis').innerHTML = `<div><b>${D.usuarios.length}</b><span>usuarios registrados</span></div><div><b>${ses}</b><span>visitas (sesiones)</span></div><div><b>${D.eventos.length}</b><span>movimientos</span></div><div><b>${D.eventos.filter(e => e.type === 'clic').length}</b><span>clics</span></div>`;
-  $('#tU').innerHTML = '<tr><th>Usuario</th><th>Primera vez</th><th>Última vez</th><th>Movimientos</th><th>Dispositivo</th><th>Ubicación</th></tr>' + D.usuarios.map(x => `<tr><td>${esc(x.usuario)}</td><td>${fecha(x.primera)}</td><td>${fecha(x.ultima)}</td><td>${x.eventos || 0}</td><td>${disp(x.device)}</td><td>${esc([x.city, x.country].filter(Boolean).join(', '))}</td></tr>`).join('');
+  const nd = Math.min(+$('#dias').value || 7, 30), dias = [...Array(nd)].map((_, i) => new Date(Date.now() - (nd - 1 - i) * 864e5).toISOString().slice(0, 10));
+  const cnt = dias.map(d => D.eventos.filter(e => (e.ts || '').startsWith(d)).length), mx = Math.max(1, ...cnt);
+  $('#bars').innerHTML = dias.map((d, i) => `<div title="${d}: ${cnt[i]}"><em>${cnt[i] || ''}</em><i style="height:${cnt[i] / mx * 100}%"></i><small>${d.slice(8)}/${d.slice(5, 7)}</small></div>`).join('');
+  const bl = D.config.bloqueados || [];
+  $('#tU').innerHTML = '<tr><th>Usuario</th><th>Primera vez</th><th>Última vez</th><th>Movimientos</th><th>Dispositivo</th><th>Ubicación</th><th></th></tr>' + D.usuarios.map(x => `<tr><td>${esc(x.usuario)} ${bl.includes(x.usuario) ? '<span class="tag">bloqueado</span>' : ''}<br><button type="button" class="ghost" data-hist="${esc(x.usuario)}">Ver historial</button></td><td>${fecha(x.primera)}</td><td>${fecha(x.ultima)}</td><td>${x.eventos || 0}</td><td>${disp(x.device)}</td><td>${esc([x.city, x.country].filter(Boolean).join(', '))}</td><td><button type="button" class="ghost ${bl.includes(x.usuario) ? '' : 'red'}" data-bloq="${esc(x.usuario)}">${bl.includes(x.usuario) ? 'Desbloquear' : 'Bloquear'}</button></td></tr>`).join('');
   $('#tE').innerHTML = '<tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Detalle</th><th>Sección</th><th>Dispositivo</th><th>Ubicación</th><th>IP</th></tr>' + ev.slice(0, 1500).map(e => `<tr><td>${fecha(e.ts)}</td><td>${esc(e.user || '—')}</td><td>${esc(e.type)}</td><td>${esc(e.target)}</td><td>${esc(e.section)}</td><td>${disp(e.device)} · ${esc(e.screen)}</td><td>${esc([e.city, e.country].filter(Boolean).join(', '))}</td><td class="mu">${esc(e.ip)}</td></tr>`).join('');
 }
 $('#fAuth').onsubmit = async e => {
@@ -64,15 +106,35 @@ $('#fAuth').onsubmit = async e => {
     D = await r.json(); $('#msg').textContent = ''; $('#out').hidden = false;
     const us = [...new Set(D.eventos.map(e => e.user || '(sin sesión)'))].sort();
     $('#fU').innerHTML = '<option value="">Todos</option>' + us.map(u => `<option>${esc(u)}</option>`).join('');
+    D.config = D.config || { nombre: '', anuncio: '', ocultos: [], bloqueados: [] };
+    $('#cNombre').value = D.config.nombre || ''; $('#cAnuncio').value = D.config.anuncio || '';
+    $('#cOcultos').innerHTML = Object.entries(MODS).map(([k, t]) => `<label><input type="checkbox" value="${k}" ${(D.config.ocultos || []).includes(k) ? 'checked' : ''}> ${t}</label>`).join('');
     pintar();
   } catch (err) { $('#msg').textContent = err.message; }
 };
+$('#tU').onclick = async e => {
+  const h = e.target.closest('[data-hist]');
+  if (h) { const u = h.dataset.hist; if (![...$('#fU').options].some(o => o.value === u)) $('#fU').add(new Option(u, u)); $('#fU').value = u; pintar(); $('#tE').closest('.card').scrollIntoView({ behavior: 'smooth' }); return; }
+  const b = e.target.closest('[data-bloq]'); if (!b) return;
+  const u = b.dataset.bloq, bl = new Set(D.config.bloqueados || []);
+  bl.has(u) ? bl.delete(u) : bl.add(u); b.disabled = true;
+  try { await guardar({ bloqueados: [...bl] }); pintar(); } catch (err) { $('#msg').textContent = err.message; b.disabled = false; }
+};
+$('#fCfg').onsubmit = async e => {
+  e.preventDefault(); $('#cMsg').className = 'mu'; $('#cMsg').textContent = 'Guardando…';
+  try {
+    await guardar({ nombre: $('#cNombre').value, anuncio: $('#cAnuncio').value, ocultos: [...$('#cOcultos').querySelectorAll('input:checked')].map(i => i.value) });
+    $('#cMsg').className = 'ok'; $('#cMsg').textContent = 'Guardado. Los usuarios lo ven al abrir la app.';
+  } catch (err) { $('#cMsg').className = 'err'; $('#cMsg').textContent = err.message; }
+};
+$('#json').onclick = () => bajar('gestor-completo-' + new Date().toISOString().slice(0, 10) + '.json', 'application/json', JSON.stringify(D, null, 2));
+$('#csv2').onclick = () => $('#csv').click();
 $('#fU').onchange = pintar;
 $('#csv').onclick = () => {
   const cols = ['ts', 'user', 'type', 'target', 'section', 'device', 'screen', 'lang', 'tz', 'city', 'country', 'ip', 'sid'];
   const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
   const csv = [cols.join(',')].concat(D.eventos.map(e => cols.map(c => q(e[c])).join(','))).join('\n');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); a.download = 'actividad-gestor-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); a.download = 'actividad-gestor-' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); a.remove();
 };
 </script>
 </body>
