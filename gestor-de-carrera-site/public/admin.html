@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Panel de administradora · Gestor de Carrera</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0B0F1A;--s:#141A2B;--s2:#1B2238;--ink:#EEF1F8;--mu:#9AA3B8;--gold:#E8B85C;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Manrope,system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font:400 40px/1 'Instrument Serif',serif;margin:0;color:var(--gold)}h2{font:400 26px 'Instrument Serif',serif;margin:0}
+.card{background:var(--s);border:1px solid var(--line);border-radius:18px;padding:18px}
+input,select,button{font:inherit;min-height:44px;border-radius:12px;border:1px solid var(--line);background:#0F1424;color:var(--ink);padding:0 12px}
+button{background:linear-gradient(120deg,#F6D58E,#E8B85C);color:#1A1405;font-weight:800;border:none;cursor:pointer}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpis div{background:var(--s2);border-radius:14px;padding:12px}.kpis b{display:block;font:400 34px 'Instrument Serif',serif;color:var(--gold)}.kpis span{color:var(--mu);font-size:13px}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mu);font-weight:600;position:sticky;top:0;background:var(--s)}
+.mu{color:var(--mu)}.err{color:#FF8A7A}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Panel de administradora</h1>
+  <p class="mu" style="margin:0">Registro de actividad de todos los usuarios del Gestor de Carrera.</p>
+  <form class="card row" id="fAuth">
+    <label for="pass" class="mu">Contraseña de administradora</label>
+    <input id="pass" type="password" autocomplete="current-password" required style="flex:1 1 220px">
+    <label for="dias" class="mu">Días</label>
+    <select id="dias"><option>1</option><option selected>7</option><option>30</option><option>60</option></select>
+    <button>Ver registro</button>
+    <span id="msg" class="err" aria-live="polite"></span>
+  </form>
+  <div id="out" hidden class="wrap" style="padding:0">
+    <div class="kpis" id="kpis"></div>
+    <div class="card"><h2>Usuarios</h2><div class="tbl"><table id="tU"></table></div></div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h2>Movimientos</h2>
+        <div class="row"><label for="fU" class="mu">Usuario</label><select id="fU"></select><button type="button" id="csv">Descargar CSV</button></div></div>
+      <div class="tbl" style="max-height:70vh"><table id="tE"></table></div>
+    </div>
+  </div>
+</div>
+<script>
+const $ = s => document.querySelector(s), esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let D = null;
+const fecha = t => t ? new Date(t).toLocaleString('es-PE') : '';
+const disp = ua => !ua ? '' : /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Mac/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows' : 'Otro';
+function pintar() {
+  const u = $('#fU').value, ev = D.eventos.filter(e => !u || (u === '(sin sesión)' ? !e.user : e.user === u));
+  const ses = new Set(D.eventos.map(e => e.sid)).size;
+  $('#kpis').innerHTML = `<div><b>${D.usuarios.length}</b><span>usuarios registrados</span></div><div><b>${ses}</b><span>visitas (sesiones)</span></div><div><b>${D.eventos.length}</b><span>movimientos</span></div><div><b>${D.eventos.filter(e => e.type === 'clic').length}</b><span>clics</span></div>`;
+  $('#tU').innerHTML = '<tr><th>Usuario</th><th>Primera vez</th><th>Última vez</th><th>Movimientos</th><th>Dispositivo</th><th>Ubicación</th></tr>' + D.usuarios.map(x => `<tr><td>${esc(x.usuario)}</td><td>${fecha(x.primera)}</td><td>${fecha(x.ultima)}</td><td>${x.eventos || 0}</td><td>${disp(x.device)}</td><td>${esc([x.city, x.country].filter(Boolean).join(', '))}</td></tr>`).join('');
+  $('#tE').innerHTML = '<tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Detalle</th><th>Sección</th><th>Dispositivo</th><th>Ubicación</th><th>IP</th></tr>' + ev.slice(0, 1500).map(e => `<tr><td>${fecha(e.ts)}</td><td>${esc(e.user || '—')}</td><td>${esc(e.type)}</td><td>${esc(e.target)}</td><td>${esc(e.section)}</td><td>${disp(e.device)} · ${esc(e.screen)}</td><td>${esc([e.city, e.country].filter(Boolean).join(', '))}</td><td class="mu">${esc(e.ip)}</td></tr>`).join('');
+}
+$('#fAuth').onsubmit = async e => {
+  e.preventDefault(); $('#msg').textContent = 'Cargando…';
+  try {
+    const r = await fetch('/api/admin?dias=' + $('#dias').value, { headers: { 'x-admin-pass': $('#pass').value } });
+    if (r.status === 401) throw new Error('Contraseña incorrecta.');
+    if (!r.ok) throw new Error('No se pudo cargar el registro.');
+    D = await r.json(); $('#msg').textContent = ''; $('#out').hidden = false;
+    const us = [...new Set(D.eventos.map(e => e.user || '(sin sesión)'))].sort();
+    $('#fU').innerHTML = '<option value="">Todos</option>' + us.map(u => `<option>${esc(u)}</option>`).join('');
+    pintar();
+  } catch (err) { $('#msg').textContent = err.message; }
+};
+$('#fU').onchange = pintar;
+$('#csv').onclick = () => {
+  const cols = ['ts', 'user', 'type', 'target', 'section', 'device', 'screen', 'lang', 'tz', 'city', 'country', 'ip', 'sid'];
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const csv = [cols.join(',')].concat(D.eventos.map(e => cols.map(c => q(e[c])).join(','))).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); a.download = 'actividad-gestor-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click();
+};
+</script>
+</body>
+</html>
