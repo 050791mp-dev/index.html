@@ -34,4 +34,4 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 3a710c12-7223-4c0f-8b2b-6e4ddd24fd8e
-        run: npx -y netlify-cli@17 deploy --prod --dir public --functions netlify/functions --message "GitHub ${{ github.sha }}"
+        run: npx -y netlify-cli@latest deploy --prod --dir public --functions netlify/functions --message "GitHub ${{ github.sha }}"
