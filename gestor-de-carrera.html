@@ -76,6 +76,9 @@ textarea{resize:vertical}
 
 /* ===== v2 diseño ===== */
 [hidden]{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding-block:24px}
+.lcard{width:100%;max-width:420px;background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:28px;display:flex;flex-direction:column;gap:18px}
+.linkbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:12px;color:var(--muted);font-weight:600;cursor:pointer}
 .ahora{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--ink);color:var(--bg)}
 .ahora .hint,.ahora .eyebrow{color:color-mix(in srgb,var(--bg) 72%,transparent)}
 .ahora h2{color:var(--bg)}
@@ -139,11 +142,34 @@ input,textarea,select{border-radius:12px}
 
 </head>
 <body>
-<div class="wrap">
+<div id="login" class="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="lcard">
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 40 40" width="40" height="40"><rect width="40" height="40" rx="11" class="lg-bg"/><path d="M13 9c0 8 14 14 14 22M27 9c0 8-14 14-14 22" class="lg-s"/><path d="M15 14h10M14 20h12M15 26h10" class="lg-s2"/></svg></span><div><div class="eyebrow">Acceso privado</div><h1 id="loginTitle" style="font-size:30px">Gestor de Carrera</h1></div></div>
+    <form id="fLogin" class="stack" style="gap:10px" hidden>
+      <label for="lUser">Usuario</label><select id="lUser"></select>
+      <label for="lPass">Contraseña</label><input id="lPass" type="password" autocomplete="current-password" required>
+      <button class="primary" id="btnLogin">Entrar</button>
+      <div class="row" style="justify-content:space-between"><button type="button" class="ghost" id="goCrear" style="flex:0 0 auto">Crear otra cuenta</button><label for="lImp" class="ghost linkbtn" style="flex:0 0 auto">Importar cuenta</label></div>
+    </form>
+    <form id="fCrear" class="stack" style="gap:10px" hidden>
+      <h2>Crea tu cuenta</h2>
+      <p class="hint" style="margin:0">Tus datos se guardan cifrados en este dispositivo. Sin tu contraseña nadie puede verlos.</p>
+      <label for="cUser">Usuario</label><input id="cUser" autocomplete="username" required maxlength="40" pattern="[A-Za-z0-9._\-]{3,40}" title="3 a 40 letras, números, punto, guion o guion bajo">
+      <label for="cPass">Contraseña (mínimo 8 caracteres)</label><input id="cPass" type="password" autocomplete="new-password" minlength="8" required>
+      <label for="cPass2">Repite la contraseña</label><input id="cPass2" type="password" autocomplete="new-password" minlength="8" required>
+      <p class="err" style="margin:0">Importante: si olvidas la contraseña, tus datos no se pueden recuperar.</p>
+      <button class="primary" id="btnCrear">Crear cuenta</button>
+      <div class="row" style="justify-content:space-between"><button type="button" class="ghost" id="goLogin" style="flex:0 0 auto" hidden>Ya tengo cuenta</button><label for="lImp" class="ghost linkbtn" style="flex:0 0 auto">Importar cuenta</label></div>
+    </form>
+    <input type="file" id="lImp" accept="application/json,.json" class="sr">
+    <p class="msg" id="lMsg" aria-live="polite" style="margin:0"></p>
+  </div>
+</div>
+<div class="wrap" id="app" hidden>
   <header>
     <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 40 40" width="40" height="40"><rect width="40" height="40" rx="11" class="lg-bg"/><path d="M13 9c0 8 14 14 14 22M27 9c0 8-14 14-14 22" class="lg-s"/><path d="M15 14h10M14 20h12M15 26h10" class="lg-s2"/></svg></span><div><div class="eyebrow" id="nivelTxt">Sistema de estudio</div><h1>Gestor de Carrera</h1></div></div>
     <div class="row" style="flex:0 0 auto"><span class="hint mono" id="hoy"></span>
-      <select id="nivel" aria-label="Nivel de estudios" style="width:auto"><option>Universidad</option><option>Colegio</option></select></div>
+      <span class="hint" id="whoami"></span><button class="ghost" id="btnLogout" style="flex:0 0 auto">Cerrar sesión</button></div>
   </header>
 
   <section class="stats" aria-label="Resumen">
@@ -152,7 +178,7 @@ input,textarea,select{border-radius:12px}
     <div class="stat"><span class="sico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 7v6M12 17h.01M4 20h16L12 4z"/></svg></span><b id="sVenc" style="color:var(--warn)">0</b><span>Vencidos</span></div>
     <div class="stat"><span class="sico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg></span><b id="sEx">0</b><span>Exámenes por rendir</span></div>
   </section>
-  <p class="hint" id="dbWarn" hidden>Tus datos se guardan solo en este dispositivo. Usa <b>Memoria → Exportar respaldo</b> de vez en cuando para no perderlos.</p>
+  <p class="hint" id="dbWarn" hidden>Tus datos están cifrados con tu contraseña y guardados solo en este dispositivo. Usa <b>Memoria → Exportar respaldo</b> de vez en cuando.</p>
 
   <nav role="tablist" aria-label="Secciones">
     <button class="tab" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
@@ -332,7 +358,7 @@ input,textarea,select{border-radius:12px}
       <div class="row"><input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-..." style="flex:1 1 260px"><button class="primary" id="btnKey" style="flex:0 0 auto">Guardar clave</button><button class="ghost" id="btnKeyDel" style="flex:0 0 auto">Borrar</button></div>
       <p class="msg" id="msgKey" aria-live="polite"></p>
       <h3>Respaldo de tus datos</h3>
-      <p class="hint">Guarda un archivo con toda tu información para pasarla a otro dispositivo o recuperarla.</p>
+      <p class="hint">Descarga tu cuenta en un archivo cifrado. Para abrirla en otro dispositivo usa "Importar cuenta" en la pantalla de inicio y tu misma contraseña.</p>
       <div class="row"><button id="btnExp" style="flex:0 0 auto">Exportar respaldo</button><label for="impFile" class="pill" style="flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer">Importar respaldo</label><input type="file" id="impFile" accept="application/json,.json" class="sr"></div>
       <p class="msg" id="msgBk" aria-live="polite"></p>
     </div>
@@ -341,7 +367,82 @@ input,textarea,select{border-radius:12px}
 </div>
 
 <script>
+/* ---------- cuentas locales cifradas (AES-GCM 256 + PBKDF2) ---------- */
 (() => {
+const enc = new TextEncoder(), dec = new TextDecoder();
+const b64 = u => { const a = new Uint8Array(u); let s = ''; for (let i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const V = { user: null, key: null, salt: null, pw: null, data: {}, t: null, primero: false };
+const users = () => { try { return JSON.parse(localStorage.getItem('gc-users')) || []; } catch (e) { return []; } };
+const setUsers = u => localStorage.setItem('gc-users', JSON.stringify(u));
+const rec = u => { try { return JSON.parse(localStorage.getItem('gc-user-' + u)); } catch (e) { return null; } };
+async function derive(pw, salt) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function seal(obj, key, salt, user) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(obj)));
+  return { app: 'gestor-de-carrera', v: 2, user, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
+}
+async function open(r, key) { return JSON.parse(dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(r.iv) }, key, unb64(r.ct)))); }
+async function flush() { clearTimeout(V.t); if (!V.key) return; localStorage.setItem('gc-user-' + V.user, JSON.stringify(await seal(V.data, V.key, V.salt, V.user))); }
+window.LS = { get(k, d) { return k in V.data ? V.data[k] : d; }, set(k, v) { V.data[k] = v; clearTimeout(V.t); V.t = setTimeout(flush, 400); } };
+window.VAULT = {
+  get user() { return V.user; }, get primero() { return V.primero; }, flush,
+  exportar: async () => { await flush(); return localStorage.getItem('gc-user-' + V.user); },
+  importarAqui: async r => { const key = await derive(V.pw, unb64(r.salt)); V.data = await open(r, key); await flush(); },
+  salir: async () => { await flush(); location.reload(); }
+};
+const $ = s => document.querySelector(s), msg = t => $('#lMsg').textContent = t;
+function vista() {
+  const us = users();
+  $('#fLogin').hidden = !us.length; $('#fCrear').hidden = !!us.length; $('#goLogin').hidden = !us.length;
+  $('#lUser').innerHTML = us.map(u => `<option>${u.replace(/[<>&"]/g, '')}</option>`).join('');
+}
+async function entrar(user, pw, data, salt, key) {
+  Object.assign(V, { user, pw, salt, key, data }); await flush();
+  $('#login').remove(); $('#app').hidden = false; $('#whoami').textContent = user;
+  let idle; const lock = () => { clearTimeout(idle); idle = setTimeout(() => window.VAULT.salir(), 20 * 60 * 1000); };
+  ['click', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, lock, { passive: true })); lock();
+  window.__startApp();
+}
+$('#goCrear').onclick = () => { $('#fLogin').hidden = true; $('#fCrear').hidden = false; msg(''); };
+$('#goLogin').onclick = () => { $('#fLogin').hidden = false; $('#fCrear').hidden = true; msg(''); };
+$('#fCrear').onsubmit = async e => {
+  e.preventDefault();
+  const u = $('#cUser').value.trim(), p = $('#cPass').value;
+  if (p !== $('#cPass2').value) return msg('Las contraseñas no coinciden.');
+  const us = users(); if (us.includes(u)) return msg('Ese usuario ya existe en este dispositivo.');
+  msg('Creando cuenta cifrada…');
+  V.primero = !us.length;
+  const salt = crypto.getRandomValues(new Uint8Array(16)), key = await derive(p, salt);
+  setUsers(us.concat(u)); await entrar(u, p, {}, salt, key);
+};
+$('#fLogin').onsubmit = async e => {
+  e.preventDefault();
+  const u = $('#lUser').value, r = rec(u); if (!r) return msg('No se encontró esa cuenta.');
+  msg('Abriendo…');
+  try { const salt = unb64(r.salt), key = await derive($('#lPass').value, salt); const data = await open(r, key); await entrar(u, $('#lPass').value, data, salt, key); }
+  catch (err) { msg('Contraseña incorrecta.'); $('#lPass').select(); }
+};
+$('#lImp').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const r = JSON.parse(await f.text());
+    if (r.app !== 'gestor-de-carrera' || !r.ct || !r.user) throw 0;
+    localStorage.setItem('gc-user-' + r.user, JSON.stringify(r));
+    const us = users(); if (!us.includes(r.user)) setUsers(us.concat(r.user));
+    vista(); $('#lUser').value = r.user; msg('Cuenta "' + r.user + '" importada. Entra con su contraseña.');
+  } catch (err) { msg('Ese archivo no es un respaldo del Gestor de Carrera.'); }
+  e.target.value = '';
+};
+if (!window.crypto || !crypto.subtle) msg('Este navegador no permite cifrado. Abre la app desde https o desde el archivo en un navegador moderno.');
+vista();
+})();
+</script>
+<script>
+window.__startApp = () => {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -355,7 +456,7 @@ const S = { items: [], notas: [], fichas: {}, curso: null, perfil: { texto: '' }
 let db = null, sample = null;
 
 /* ---------- store: cloud db, else browser fallback ---------- */
-const LS = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+const LS = window.LS; const LS_OLD = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const store = {
   async addItem(it) { if (db) return db.collection('items').add(it); S.items.push({ ...it, id: 'l' + Date.now() + Math.random() }); LS.set('items', S.items); render(); },
   async updItem(id, patch) { if (db) return db.doc('items/' + id).update(patch); Object.assign(S.items.find(x => x.id === id), patch); LS.set('items', S.items); render(); },
@@ -444,12 +545,11 @@ document.querySelector('nav').onclick = e => {
 };
 function applyNivel(n) {
   const esc_ = n === 'Colegio';
-  $('#nivel').value = n; $('#nivelTxt').textContent = 'Sistema de estudio · ' + (esc_ ? 'Escolar' : 'Universitario');
+  $('#nivelTxt').textContent = 'Sistema de estudio';
   document.querySelectorAll('.lblC').forEach(e => e.textContent = esc_ ? 'materia' : 'curso');
   document.querySelectorAll('.lblCU').forEach(e => e.textContent = esc_ ? 'Materia' : 'Curso');
 }
-$('#nivel').onchange = e => { LS.set('nivel', e.target.value); applyNivel(e.target.value); };
-applyNivel(LS.get('nivel', 'Universidad'));
+applyNivel('Universidad');
 
 /* ---------- AI helpers ---------- */
 const errTxt = c => ({ not_granted: 'No diste permiso para usar la IA en esta página.', rate_limited: 'Llegaste al límite de uso por ahora. Intenta en unos minutos.', prompt_too_large: 'El material es demasiado largo. Divide la clase en partes.', invalid_json: 'La IA respondió en un formato inesperado. Intenta de nuevo.', session_expired: 'Vuelve a iniciar sesión.', no_key: 'Para usar la IA, pega tu clave de API en Memoria → Ajustes.', bad_key: 'La clave de API no es válida. Revísala en Memoria → Ajustes.', refused: 'La IA no pudo responder esa solicitud. Reformúlala.', sampling_disabled: 'La IA no está disponible en esta cuenta.' }[c] || 'No se pudo completar. Intenta de nuevo.');
@@ -846,23 +946,25 @@ function makeSample() {
 }
 $('#apiKey').value = LS.get('apiKey', '') ? '••••••••••••' : '';
 $('#btnKey').onclick = () => { const v = $('#apiKey').value.trim(); if (!v || v.startsWith('•')) { $('#msgKey').textContent = 'Pega una clave válida.'; return; } LS.set('apiKey', v); $('#apiKey').value = '••••••••••••'; $('#msgKey').textContent = 'Clave guardada en este dispositivo. La IA ya está activa.'; };
-$('#btnKeyDel').onclick = () => { try { localStorage.removeItem('apiKey'); } catch (e) {} $('#apiKey').value = ''; $('#msgKey').textContent = 'Clave borrada.'; };
-$('#btnExp').onclick = () => {
-  const data = { app: 'gestor-de-carrera', version: 1, fecha: new Date().toISOString(), items: S.items, notas: S.notas, fichas: S.fichas, perfil: S.perfil, plan: S.plan, enf: S.enf, meta: LS.get('meta', 120), nivel: LS.get('nivel', 'Universidad') };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
-  const a = document.createElement('a'); a.href = url; a.download = 'gestor-de-carrera-respaldo-' + iso(hoy0()) + '.json'; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
-  $('#msgBk').textContent = 'Respaldo descargado.';
+$('#btnKeyDel').onclick = () => { LS.set('apiKey', ''); $('#apiKey').value = ''; $('#msgKey').textContent = 'Clave borrada.'; };
+$('#btnExp').onclick = async () => {
+  const txt = await VAULT.exportar();
+  const url = URL.createObjectURL(new Blob([txt], { type: 'application/json' }));
+  const a = document.createElement('a'); a.href = url; a.download = 'gestor-de-carrera-' + VAULT.user + '-' + iso(hoy0()) + '.json'; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+  $('#msgBk').textContent = 'Respaldo cifrado descargado. Solo se abre con tu contraseña.';
 };
 $('#impFile').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
-    const d = JSON.parse(await f.text());
-    if (d.app !== 'gestor-de-carrera') throw 0;
-    ['items', 'notas', 'fichas', 'perfil', 'plan', 'enf', 'meta', 'nivel'].forEach(k => { if (d[k] !== undefined) LS.set(k, d[k]); });
-    $('#msgBk').textContent = 'Respaldo importado. Recargando…'; setTimeout(() => location.reload(), 800);
-  } catch (err) { $('#msgBk').textContent = 'Ese archivo no es un respaldo del Gestor de Carrera.'; }
+    const r = JSON.parse(await f.text());
+    if (r.app !== 'gestor-de-carrera' || !r.ct) throw 0;
+    await VAULT.importarAqui(r);
+    $('#msgBk').textContent = 'Respaldo importado. Vuelve a entrar…'; setTimeout(() => location.reload(), 800);
+  } catch (err) { $('#msgBk').textContent = 'No se pudo importar: el archivo no es un respaldo o se creó con otra contraseña. Usa "Importar cuenta" en la pantalla de inicio.'; }
+  e.target.value = '';
 };
-if (!LS.get('seeded', false) && !LS.get('items', []).length) {
+$('#btnLogout').onclick = () => VAULT.salir();
+if (VAULT.primero && !LS.get('seeded', false) && !LS.get('items', []).length) {
   LS.set('items', SEED.items); LS.set('notas', SEED.notas); LS.set('fichas', SEED.fichas); LS.set('perfil', SEED.perfil); LS.set('seeded', true);
 }
 
@@ -884,7 +986,7 @@ render(); renderNotas(); renderPlan(); renderChat(); renderEnfoque();
   db.collection('enfoque').onSnapshot(s => { S.enf = {}; s.docs.forEach(d => S.enf[d.id] = d.data()); renderEnfoque(); });
   db.doc('config/plan').onSnapshot(s => { S.plan = s.exists ? s.data() : null; renderPlan(); });
 })();
-})();
+};
 </script>
 </body>
 </html>
