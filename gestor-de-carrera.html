@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{--bg:#EEF1F5;--surface:#FFFFFF;--ink:#141925;--muted:#566072;--line:#D9DEE7;--accent:#2446B8;--accent-ink:#FFFFFF;--soft:#E3E9FA;--warn:#A6400C;--ok:#1E6B45;
 --ex:#8A2F0A;--ex-bg:#FBE4D6;--tr:#1D3F84;--tr-bg:#DDE6F8;--ta:#1E5E4A;--ta-bg:#D7EFE6;--cl:#3F4654;--cl-bg:#E6E9EF;--ev:#5A2D78;--ev-bg:#EEE2F6}
@@ -146,6 +147,82 @@ input,textarea,select{border-radius:12px}
 .agent button[aria-pressed="true"]{background:var(--soft);color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 @media (max-width:760px){.banner{padding:18px}.art svg{width:96px}.grid2{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){button:active{transform:none}}
+
+/* ===== v3 · identidad "Laboratorio" ===== */
+:root{--bg:#EEF2EF;--surface:#FFFFFF;--ink:#10201B;--muted:#56665F;--line:#DCE4E0;--accent:#0F5A48;--accent-ink:#FFFFFF;--soft:#DDF0E7;--accent2:#FF6B3D;--soft2:#FFE6DC;
+--forest:#0C2A22;--forest2:#123D31;--mint:#9FE3C4;--shadow:0 1px 2px rgba(12,42,34,.06),0 12px 32px -14px rgba(12,42,34,.28);--glass:rgba(238,242,239,.86);--radius:22px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0A1512;--surface:#12211C;--ink:#E8F1EC;--muted:#9DB2A8;--line:#22362F;--accent:#6FD3AE;--accent-ink:#0A1512;--soft:#16352B;--accent2:#FF8A62;--soft2:#3A2118;--forest:#07120F;--forest2:#0E241D;--mint:#6FD3AE;--shadow:0 1px 2px rgba(0,0,0,.5),0 12px 32px -14px rgba(0,0,0,.8);--glass:rgba(10,21,18,.86)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0A1512;--surface:#12211C;--ink:#E8F1EC;--muted:#9DB2A8;--line:#22362F;--accent:#6FD3AE;--accent-ink:#0A1512;--soft:#16352B;--accent2:#FF8A62;--soft2:#3A2118;--forest:#07120F;--forest2:#0E241D;--mint:#6FD3AE;--shadow:0 1px 2px rgba(0,0,0,.5),0 12px 32px -14px rgba(0,0,0,.8);--glass:rgba(10,21,18,.86)}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);background-image:radial-gradient(1200px 600px at 110% -10%,color-mix(in srgb,var(--mint) 22%,transparent),transparent 60%),radial-gradient(900px 500px at -10% 110%,color-mix(in srgb,var(--accent2) 10%,transparent),transparent 60%);background-attachment:fixed}
+h1,h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-.01em}
+h1{font-size:clamp(38px,5.4vw,58px);line-height:1}
+h2{font-size:clamp(24px,2.6vw,30px);line-height:1.1}
+h3{font-family:'Manrope',sans-serif;font-weight:800;font-size:16px}
+.eyebrow{font-family:'Manrope',sans-serif;font-weight:800;letter-spacing:.16em;color:var(--accent)}
+.wrap{max-width:1360px;display:grid;grid-template-columns:248px minmax(0,1fr);column-gap:32px;row-gap:22px;align-items:start;padding-block:28px 72px}
+.wrap>*{grid-column:2}
+.wrap>nav{grid-column:1;grid-row:1 / span 40;position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);flex-direction:column;flex-wrap:nowrap;gap:4px;padding:18px 12px;border-radius:26px;background:linear-gradient(170deg,var(--forest),var(--forest2));box-shadow:var(--shadow);overflow:visible}
+nav::before{content:"Gestor de Carrera";display:block;font:400 26px/1.05 'Instrument Serif',serif;color:#fff;padding:6px 12px 16px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:8px}
+nav button.tab{justify-content:flex-start;gap:12px;display:flex;align-items:center;color:rgba(255,255,255,.72);font-weight:600;border-radius:14px;padding:0 14px;min-height:46px;transition:background .2s,color .2s,transform .15s}
+nav button.tab svg{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+nav button.tab:hover{background:rgba(255,255,255,.08);color:#fff}
+nav button.tab[aria-selected="true"]{background:var(--mint);color:var(--forest);box-shadow:0 8px 20px -10px var(--mint)}
+header{padding:6px 0 2px}
+header .brand .logo{display:none}
+.stats{gap:14px}
+.stat{border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s}
+.stat::after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:var(--soft);opacity:.7}
+.stat>*{position:relative;z-index:1}
+.stat:hover{transform:translateY(-2px)}
+.stat .sico{background:var(--forest);}
+.stat .sico svg{stroke:var(--mint)}
+.stat b{font:400 40px/1 'Instrument Serif',serif}
+.panel{border-radius:var(--radius);padding:24px;border:1px solid color-mix(in srgb,var(--line) 70%,transparent);transition:box-shadow .25s}
+.panel:hover{box-shadow:0 1px 2px rgba(12,42,34,.06),0 18px 40px -16px rgba(12,42,34,.32)}
+.banner{background:linear-gradient(125deg,var(--forest) 0%,var(--forest2) 55%,color-mix(in srgb,var(--accent) 70%,var(--forest2)) 100%);color:#fff;border-radius:28px;padding:30px 34px;box-shadow:var(--shadow);position:relative}
+.banner::before{content:"";position:absolute;inset:0;background:radial-gradient(420px 220px at 85% 20%,color-mix(in srgb,var(--mint) 35%,transparent),transparent 70%);pointer-events:none}
+.banner h2{color:#fff;font-size:clamp(30px,3.6vw,44px)}
+.banner p{color:rgba(255,255,255,.78)}
+.banner .eyebrow{color:var(--mint)}
+.banner .art{position:relative;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35))}
+.art .f2{fill:#fff}.art .f4{fill:color-mix(in srgb,var(--mint) 45%,#fff)}
+.ahora{background:linear-gradient(120deg,var(--accent2),color-mix(in srgb,var(--accent2) 70%,#E23E57));color:#fff;border:none}
+.ahora h2{color:#fff;font-size:clamp(26px,3vw,36px)}
+.ahora .eyebrow,.ahora .hint{color:rgba(255,255,255,.85)}
+.ahora button.primary{background:#fff;color:#C2412A;border-color:#fff;box-shadow:0 10px 24px -12px rgba(0,0,0,.45)}
+button{border-radius:14px;font-family:'Manrope',sans-serif}
+button.primary{background:var(--accent);border-color:var(--accent);box-shadow:0 10px 22px -12px var(--accent)}
+button.primary:hover{filter:brightness(1.08)}
+input,textarea,select{border-radius:14px;background:color-mix(in srgb,var(--bg) 70%,var(--surface));border-color:var(--line);font-family:'Manrope',sans-serif}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.filters button{background:color-mix(in srgb,var(--bg) 70%,var(--surface));font-weight:600}
+.filters button[aria-pressed="true"]{background:var(--forest);color:#fff}
+.item{padding:14px 10px;border-radius:16px;border-bottom:none;margin-bottom:4px;transition:background .15s}
+.item:hover{background:color-mix(in srgb,var(--soft) 55%,transparent)}
+.pill{border-radius:999px;padding:4px 10px}
+.note{background:color-mix(in srgb,var(--bg) 55%,var(--surface));border:1px solid var(--line);border-radius:20px}
+.fcard{background:linear-gradient(135deg,var(--forest),var(--forest2));color:#fff;min-height:200px}
+.fcard .q{font:400 30px/1.15 'Instrument Serif',serif;color:#fff}.fcard .hint{color:var(--mint)}.fcard .a{color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.2)}
+.kpis div{border-radius:16px;background:color-mix(in srgb,var(--soft) 60%,var(--surface))}
+.kpis b{font:400 32px/1 'Instrument Serif',serif}
+.clock{font-family:'Instrument Serif',serif;font-size:clamp(88px,16vw,150px);color:var(--accent)}
+.bar span,#metaFill{background:linear-gradient(90deg,var(--accent),var(--mint))}
+.bubble.me{background:var(--forest);color:#fff}
+.lcard{border-radius:28px}
+.login{background:linear-gradient(160deg,var(--forest),var(--forest2) 60%,color-mix(in srgb,var(--accent) 60%,var(--forest2)))}
+.login h1{font-size:40px}
+footer{grid-column:2}
+section{animation:rise .35s ease both}
+@keyframes rise{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:980px){
+  .wrap{grid-template-columns:minmax(0,1fr);padding-bottom:110px}
+  .wrap>*{grid-column:1}
+  .wrap>nav{grid-row:auto;position:fixed;left:0;right:0;bottom:0;top:auto;z-index:20;flex-direction:row;overflow-x:auto;border-radius:22px 22px 0 0;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));gap:2px}
+  nav::before{display:none}
+  nav button.tab{flex-direction:column;justify-content:center;gap:3px;min-width:92px;min-height:56px;padding:4px 6px;font-size:11px;white-space:nowrap}
+  header .brand .logo{display:block}
+}
+@media (prefers-reduced-motion:reduce){section{animation:none}.stat:hover{transform:none}}
 </style>
 
 </head>
@@ -1117,6 +1194,10 @@ function calificar() {
 $('#smBody').onclick = e => { if (e.target.id === 'smFin') calificar(); };
 document.querySelector('[data-tab="practicar"]').addEventListener('click', () => { fillSel('#smCurso'); renderFC(); renderHist(); });
 
+
+/* ---------- íconos del menú ---------- */
+(() => { const I = { agenda: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>', enfoque: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>', cursos: '<path d="M4 5h6v15H4zM10 5h6v15h-6zM16 7l4-1 2 14-4 1z"/>', clases: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>', practicar: '<rect x="4" y="3" width="14" height="18" rx="3"/><path d="M8 8h6M8 12h6M8 16h3"/>', plan: '<path d="M4 20c6 0 4-8 10-8s4-8 6-8"/><circle cx="4" cy="20" r="1.6"/><circle cx="20" cy="4" r="1.6"/>', ia: '<path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 15l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>', memoria: '<rect x="3" y="4" width="18" height="5" rx="2"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/>' };
+document.querySelectorAll('nav button.tab').forEach(b => { const k = b.dataset.tab; if (I[k] && !b.querySelector('svg')) b.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`); }); })();
 /* ---------- boot ---------- */
 render(); renderNotas(); renderPlan(); renderChat(); renderEnfoque();
 (async () => {
