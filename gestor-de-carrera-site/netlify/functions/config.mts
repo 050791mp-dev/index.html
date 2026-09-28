@@ -27,6 +27,7 @@ export default async (req: Request, _context: Context) => {
 
   let b: any;
   try { b = JSON.parse((await req.text()).slice(0, 20000)); } catch { return new Response("JSON inválido", { status: 400 }); }
+  if (!b || typeof b !== "object" || Array.isArray(b)) return new Response("JSON inválido", { status: 400 });
   const prev = await leer();
   const next = {
     nombre: b.nombre !== undefined ? txt(b.nombre, 60) : prev.nombre || "",

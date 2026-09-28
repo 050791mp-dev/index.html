@@ -818,7 +818,7 @@ $('#btnAdd').onclick = async () => {
 
 /* ---------- tabs & level ---------- */
 document.querySelector('nav').onclick = e => {
-  const b = e.target.closest('[data-tab]'); if (!b) return;
+  const b = e.target.closest('[data-tab]'); if (!b || b.hidden) return;
   document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === b));
   ['agenda', 'enfoque', 'cursos', 'clases', 'practicar', 'plan', 'ia', 'memoria'].forEach(t => $('#tab-' + t).hidden = t !== b.dataset.tab);
 };
@@ -1414,14 +1414,18 @@ render(); renderNotas(); renderPlan(); renderChat(); renderEnfoque();
     const oc = C.ocultos || [];
     document.querySelectorAll('nav button.tab').forEach(b => { b.hidden = oc.includes(b.dataset.tab); });
     const sel = document.querySelector('nav button.tab[aria-selected="true"]');
-    if (sel && sel.hidden) { const v = document.querySelector('nav button.tab:not([hidden])'); v && v.click(); }
+    if (sel && sel.hidden) { const v = document.querySelector('nav button.tab:not([hidden])'); if (v) v.click(); else document.querySelectorAll('[id^="tab-"]').forEach(t => { t.hidden = true; }); }
     let bq = document.getElementById('bloqAdm');
     if (C.bloqueado && !bq) { bq = document.createElement('div'); bq.id = 'bloqAdm'; bq.innerHTML = '<div>Acceso bloqueado por la administradora.<br><span style="opacity:.7;font-weight:400;font-size:15px">Si crees que es un error, comunícate con ella.</span></div>'; document.body.appendChild(bq); }
     else if (!C.bloqueado && bq) bq.remove();
   };
   const cargar = async () => {
     const u = (window.VAULT && window.VAULT.user) || '';
-    try { const r = await fetch('/api/config' + (u ? '?u=' + encodeURIComponent(u) : ''), { cache: 'no-store' }); if (r.ok) { C = await r.json(); aplicar(); } } catch (e) {}
+    try {
+      const r = await fetch('/api/config' + (u ? '?u=' + encodeURIComponent(u) : ''), { cache: 'no-store' });
+      if (!r.ok || u !== ((window.VAULT && window.VAULT.user) || '')) return; // respuesta vieja: se descarta
+      C = await r.json(); aplicar();
+    } catch (e) {}
   };
   cargar();
   setInterval(() => { const u = (window.VAULT && window.VAULT.user) || ''; if (u !== u0) { u0 = u; cargar(); } }, 3000);
