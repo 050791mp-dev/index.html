@@ -1,12 +1,12 @@
 import type { Context, Config } from "@netlify/functions";
 import { getStore, getDeployStore } from "@netlify/blobs";
+import { esAdmin } from "../lib/auth.mts";
 
 const store = (name: string) =>
   Netlify.context?.deploy?.context === "production" ? getStore(name) : getDeployStore(name);
 
 export default async (req: Request, _context: Context) => {
-  const pass = Netlify.env.get("ADMIN_PASSWORD");
-  if (!pass || req.headers.get("x-admin-pass") !== pass) return new Response("No autorizado", { status: 401 });
+  if (!esAdmin(req)) return new Response("No autorizado", { status: 401 });
 
   const url = new URL(req.url);
   const days = Math.min(Math.max(parseInt(url.searchParams.get("dias") || "7", 10) || 7, 1), 60);

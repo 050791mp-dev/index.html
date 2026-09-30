@@ -1,5 +1,6 @@
 import type { Context, Config } from "@netlify/functions";
 import { getStore, getDeployStore } from "@netlify/blobs";
+import { esAdmin } from "../lib/auth.mts";
 
 const store = (name: string) =>
   Netlify.context?.deploy?.context === "production" ? getStore(name) : getDeployStore(name);
@@ -22,8 +23,7 @@ export default async (req: Request, _context: Context) => {
   }
   if (req.method !== "POST") return new Response("Método no permitido", { status: 405 });
 
-  const pass = Netlify.env.get("ADMIN_PASSWORD");
-  if (!pass || req.headers.get("x-admin-pass") !== pass) return new Response("No autorizado", { status: 401 });
+  if (!esAdmin(req)) return new Response("No autorizado", { status: 401 });
 
   let b: any;
   try { b = JSON.parse((await req.text()).slice(0, 20000)); } catch { return new Response("JSON inválido", { status: 400 }); }
