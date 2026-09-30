@@ -1,12 +1,13 @@
 import type { Context, Config } from "@netlify/functions";
 import { getStore, getDeployStore } from "@netlify/blobs";
-import { esAdmin } from "../lib/auth.mts";
+import { autorizar, intentosFallidos } from "../lib/auth.mts";
 
 const store = (name: string) =>
   Netlify.context?.deploy?.context === "production" ? getStore(name) : getDeployStore(name);
 
-export default async (req: Request, _context: Context) => {
-  if (!esAdmin(req)) return new Response("No autorizado", { status: 401 });
+export default async (req: Request, context: Context) => {
+  const rechazo = await autorizar(req, context);
+  if (rechazo) return rechazo;
 
   const url = new URL(req.url);
   const days = Math.min(Math.max(parseInt(url.searchParams.get("dias") || "7", 10) || 7, 1), 60);
@@ -25,7 +26,10 @@ export default async (req: Request, _context: Context) => {
   }
   eventos.sort((a, b) => (a.ts < b.ts ? 1 : -1));
   const cfg = (await store("config").get("app", { type: "json" })) || { nombre: "", anuncio: "", ocultos: [], bloqueados: [] };
-  return Response.json({ usuarios, eventos: eventos.slice(0, 3000), config: cfg });
+  return Response.json(
+    { usuarios, eventos: eventos.slice(0, 3000), config: cfg, intentos: await intentosFallidos() },
+    { headers: { "cache-control": "no-store" } },
+  );
 };
 
 export const config: Config = { path: "/api/admin" };
