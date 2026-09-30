@@ -1,6 +1,6 @@
 import type { Context, Config } from "@netlify/functions";
 import { getStore, getDeployStore } from "@netlify/blobs";
-import { esAdmin } from "../lib/auth.mts";
+import { autorizar } from "../lib/auth.mts";
 
 const store = (name: string) =>
   Netlify.context?.deploy?.context === "production" ? getStore(name) : getDeployStore(name);
@@ -11,7 +11,7 @@ const txt = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0
 const leer = async () =>
   ((await store("config").get("app", { type: "json" })) as any) || { nombre: "", anuncio: "", ocultos: [], bloqueados: [] };
 
-export default async (req: Request, _context: Context) => {
+export default async (req: Request, context: Context) => {
   if (req.method === "GET") {
     // Público: la app pide su configuración. Nunca devuelve la lista de bloqueados, solo si ESTE usuario lo está.
     const c = await leer();
@@ -23,7 +23,8 @@ export default async (req: Request, _context: Context) => {
   }
   if (req.method !== "POST") return new Response("Método no permitido", { status: 405 });
 
-  if (!esAdmin(req)) return new Response("No autorizado", { status: 401 });
+  const rechazo = await autorizar(req, context);
+  if (rechazo) return rechazo;
 
   let b: any;
   try { b = JSON.parse((await req.text()).slice(0, 20000)); } catch { return new Response("JSON inválido", { status: 400 }); }

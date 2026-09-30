@@ -37,6 +37,9 @@ textarea{font:inherit;width:100%;min-height:80px;border-radius:12px;border:1px s
 .checks{display:flex;flex-wrap:wrap;gap:8px}.checks label{display:flex;gap:6px;align-items:center;background:var(--s2);border-radius:10px;padding:8px 12px;cursor:pointer}
 .checks input{min-height:0}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;white-space:nowrap;font-weight:700}
+.chip.robot{background:#3a1d1d;color:#FF8A7A}.chip.prob{background:#3a2f15;color:#F6D58E}.chip.persona{background:#15332a;color:#7ED9B0}.chip.visit{background:#1f2640;color:#AFC0FF}
+body.velo #out{filter:blur(18px)}
 .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;background:#3a1d1d;color:#FF8A7A}
 </style>
 </head>
@@ -46,10 +49,11 @@ textarea{font:inherit;width:100%;min-height:80px;border-radius:12px;border:1px s
   <p class="mu" style="margin:0">Registro de actividad de todos los usuarios del Gestor de Carrera.</p>
   <form class="card row" id="fAuth">
     <label for="pass" class="mu">Contraseña de administradora</label>
-    <input id="pass" type="password" autocomplete="current-password" required style="flex:1 1 220px">
+    <input id="pass" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" required style="flex:1 1 220px">
     <label for="dias" class="mu">Días</label>
     <select id="dias"><option>1</option><option selected>7</option><option>30</option><option>60</option></select>
     <button>Ver registro</button>
+    <button type="button" id="salir" class="ghost" hidden>Cerrar sesión</button>
     <span id="msg" class="err" aria-live="polite"></span>
   </form>
   <div id="out" hidden class="wrap" style="padding:0">
@@ -73,10 +77,11 @@ textarea{font:inherit;width:100%;min-height:80px;border-radius:12px;border:1px s
         <p class="mu" style="margin:0;font-size:13px">Los apuntes, agendas y notas de cada usuario están cifrados en su propio dispositivo: ni este panel ni nadie más puede leerlos.</p>
       </div>
     </div>
+    <div class="card"><h2>Intentos de entrar a este panel con clave incorrecta</h2><p class="mu" style="margin:4px 0 10px;font-size:13px">Después de 5 intentos fallidos, esa conexión queda bloqueada 15 minutos.</p><div class="tbl"><table id="tI"></table></div></div>
     <div class="card"><h2>Usuarios</h2><div class="tbl"><table id="tU"></table></div></div>
     <div class="card">
       <div class="row" style="justify-content:space-between"><h2>Movimientos</h2>
-        <div class="row"><label for="fU" class="mu">Usuario</label><select id="fU"></select><button type="button" id="csv">Descargar CSV</button></div></div>
+        <div class="row"><label for="fT" class="mu">Tipo</label><select id="fT"><option value="">Todos</option><option value="persona">Persona</option><option value="visit">Visitante sin entrar</option><option value="prob">Probable robot</option><option value="robot">Robot</option></select><label for="fU" class="mu">Usuario</label><select id="fU"></select><button type="button" id="csv">Descargar CSV</button></div></div>
       <div class="tbl" style="max-height:70vh"><table id="tE"></table></div>
     </div>
   </div>
@@ -85,7 +90,21 @@ textarea{font:inherit;width:100%;min-height:80px;border-radius:12px;border:1px s
 const $ = s => document.querySelector(s), esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let D = null;
 const MODS = { agenda: 'Agenda', enfoque: 'Enfoque', cursos: 'Mis cursos', clases: 'Clases', practicar: 'Practicar', plan: 'Plan', ia: 'IA', memoria: 'Memoria' };
-const pass = () => $('#pass').value;
+let PW = '';
+const pass = () => PW;
+const BOT = /HeadlessChrome|bot\b|bot\/|crawl|spider|slurp|lighthouse|curl|wget|python|axios|node-fetch|go-http|java\/|facebookexternalhit|preview|monitor|scanner|headless/i;
+const TIPOS = { robot: 'Robot', prob: 'Probable robot', persona: 'Persona', visit: 'Visitante sin entrar' };
+let TIPO = {};
+function clasificar() {
+  TIPO = {}; const S = {};
+  D.eventos.forEach(e => { (S[e.sid] = S[e.sid] || []).push(e); });
+  for (const [sid, ev] of Object.entries(S)) {
+    const ts = ev.map(e => +new Date(e.ts)), dur = (Math.max(...ts) - Math.min(...ts)) / 1000;
+    const activa = ev.some(e => e.user || ['clic', 'formulario', 'inicio de sesión'].includes(e.type) || (e.section && e.section !== 'acceso'));
+    TIPO[sid] = ev.some(e => BOT.test(e.device || '')) ? 'robot' : activa ? 'persona' : dur < 20 ? 'prob' : 'visit';
+  }
+}
+const chip = sid => `<span class="chip ${TIPO[sid] || 'visit'}">${TIPOS[TIPO[sid] || 'visit']}</span>`;
 async function guardar(cambios) {
   const r = await fetch('/api/config', { method: 'POST', headers: { 'x-admin-pass': pass(), 'content-type': 'application/json' }, body: JSON.stringify(cambios) });
   if (!r.ok) throw new Error(r.status === 401 ? 'Contraseña incorrecta.' : 'No se pudo guardar.');
@@ -95,23 +114,27 @@ function bajar(nombre, tipo, texto) { const a = document.createElement('a'); a.h
 const fecha = t => t ? new Date(t).toLocaleString('es-PE') : '';
 const disp = ua => !ua ? '' : /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Mac/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows' : 'Otro';
 function pintar() {
-  const u = $('#fU').value, ev = D.eventos.filter(e => !u || (u === '(sin sesión)' ? !e.user : e.user === u));
+  const u = $('#fU').value, t = $('#fT').value, ev = D.eventos.filter(e => (!u || (u === '(sin sesión)' ? !e.user : e.user === u)) && (!t || TIPO[e.sid] === t));
+  const nT = k => Object.values(TIPO).filter(x => x === k).length;
   const ses = new Set(D.eventos.map(e => e.sid)).size;
-  $('#kpis').innerHTML = `<div><b>${D.usuarios.length}</b><span>usuarios registrados</span></div><div><b>${ses}</b><span>visitas (sesiones)</span></div><div><b>${D.eventos.length}</b><span>movimientos</span></div><div><b>${D.eventos.filter(e => e.type === 'clic').length}</b><span>clics</span></div>`;
+  $('#kpis').innerHTML = `<div><b>${D.usuarios.length}</b><span>usuarios registrados</span></div><div><b>${ses}</b><span>visitas (sesiones)</span></div><div><b>${D.eventos.length}</b><span>movimientos</span></div><div><b>${D.eventos.filter(e => e.type === 'clic').length}</b><span>clics</span></div><div><b>${nT('persona')}</b><span>visitas de personas</span></div><div><b>${nT('robot') + nT('prob')}</b><span>visitas de robots o probables</span></div>`;
+  $('#tI').innerHTML = (D.intentos || []).length ? '<tr><th>Fecha y hora</th><th>IP</th><th>Dispositivo</th><th>Ubicación</th></tr>' + D.intentos.map(i => `<tr><td>${fecha(i.ts)}</td><td>${esc(i.ip)}</td><td>${disp(i.device)} <span class="mu">${esc((i.device || '').slice(0, 60))}</span></td><td>${esc([i.city, i.country].filter(Boolean).join(', '))}</td></tr>`).join('') : '<tr><td class="mu">Ningún intento fallido.</td></tr>';
   const nd = Math.min(+$('#dias').value || 7, 30), dias = [...Array(nd)].map((_, i) => new Date(Date.now() - (nd - 1 - i) * 864e5).toISOString().slice(0, 10));
   const cnt = dias.map(d => D.eventos.filter(e => (e.ts || '').startsWith(d)).length), mx = Math.max(1, ...cnt);
   $('#bars').innerHTML = dias.map((d, i) => `<div title="${d}: ${cnt[i]}"><em>${cnt[i] || ''}</em><i style="height:${cnt[i] / mx * 100}%"></i><small>${d.slice(8)}/${d.slice(5, 7)}</small></div>`).join('');
   const bl = D.config.bloqueados || [];
   $('#tU').innerHTML = '<tr><th>Usuario</th><th>Primera vez</th><th>Última vez</th><th>Movimientos</th><th>Dispositivo</th><th>Ubicación</th><th></th></tr>' + D.usuarios.map(x => `<tr><td>${esc(x.usuario)} ${bl.includes(x.usuario) ? '<span class="tag">bloqueado</span>' : ''}<br><button type="button" class="ghost" data-hist="${esc(x.usuario)}">Ver historial</button></td><td>${fecha(x.primera)}</td><td>${fecha(x.ultima)}</td><td>${x.eventos || 0}</td><td>${disp(x.device)}</td><td>${esc([x.city, x.country].filter(Boolean).join(', '))}</td><td><button type="button" class="ghost ${bl.includes(x.usuario) ? '' : 'red'}" data-bloq="${esc(x.usuario)}">${bl.includes(x.usuario) ? 'Desbloquear' : 'Bloquear'}</button></td></tr>`).join('');
-  $('#tE').innerHTML = '<tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Detalle</th><th>Sección</th><th>Dispositivo</th><th>Ubicación</th><th>IP</th></tr>' + ev.slice(0, 1500).map(e => `<tr><td>${fecha(e.ts)}</td><td>${esc(e.user || '—')}</td><td>${esc(e.type)}</td><td>${esc(e.target)}</td><td>${esc(e.section)}</td><td>${disp(e.device)} · ${esc(e.screen)}</td><td>${esc([e.city, e.country].filter(Boolean).join(', '))}</td><td class="mu">${esc(e.ip)}</td></tr>`).join('');
+  $('#tE').innerHTML = '<tr><th>Fecha y hora</th><th>Tipo</th><th>Usuario</th><th>Acción</th><th>Detalle</th><th>Sección</th><th>Dispositivo</th><th>Ubicación</th><th>IP</th></tr>' + ev.slice(0, 1500).map(e => `<tr><td>${fecha(e.ts)}</td><td>${chip(e.sid)}</td><td>${esc(e.user || '—')}</td><td>${esc(e.type)}</td><td>${esc(e.target)}</td><td>${esc(e.section)}</td><td>${disp(e.device)} · ${esc(e.screen)}</td><td>${esc([e.city, e.country].filter(Boolean).join(', '))}</td><td class="mu">${esc(e.ip)}</td></tr>`).join('');
 }
 $('#fAuth').onsubmit = async e => {
   e.preventDefault(); $('#msg').textContent = 'Cargando…';
   try {
-    const r = await fetch('/api/admin?dias=' + $('#dias').value, { headers: { 'x-admin-pass': $('#pass').value } });
+    const clave = $('#pass').value.trim() || PW;
+    const r = await fetch('/api/admin?dias=' + $('#dias').value, { headers: { 'x-admin-pass': clave }, cache: 'no-store' });
     if (r.status === 401) throw new Error('Contraseña incorrecta.');
+    if (r.status === 429) throw new Error('Demasiados intentos. Espera 15 minutos.');
     if (!r.ok) throw new Error('No se pudo cargar el registro.');
-    D = await r.json(); $('#msg').textContent = ''; $('#out').hidden = false;
+    D = await r.json(); PW = clave; $('#pass').value = ''; $('#pass').placeholder = 'Sesión abierta'; $('#pass').required = false; $('#salir').hidden = false; $('#msg').textContent = ''; $('#out').hidden = false; clasificar(); vigilar();
     const us = [...new Set(D.eventos.map(e => e.user || '(sin sesión)'))].sort();
     $('#fU').innerHTML = '<option value="">Todos</option>' + us.map(u => `<option>${esc(u)}</option>`).join('');
     D.config = D.config || { nombre: '', anuncio: '', ocultos: [], bloqueados: [] };
@@ -137,7 +160,18 @@ $('#fCfg').onsubmit = async e => {
 };
 $('#json').onclick = () => bajar('gestor-completo-' + new Date().toISOString().slice(0, 10) + '.json', 'application/json', JSON.stringify(D, null, 2));
 $('#csv2').onclick = () => $('#csv').click();
-$('#fU').onchange = pintar;
+$('#fU').onchange = pintar; $('#fT').onchange = pintar;
+/* ---------- privacidad ---------- */
+const cerrar = () => { PW = ''; D = null; location.replace(location.pathname); };
+$('#salir').onclick = cerrar;
+let quieto; const vigilar = () => { clearTimeout(quieto); if (PW) quieto = setTimeout(cerrar, 10 * 60 * 1000); };
+['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(t => addEventListener(t, vigilar, { passive: true }));
+let oculto = 0;
+document.addEventListener('visibilitychange', () => {
+  document.body.classList.toggle('velo', document.hidden);
+  if (document.hidden) oculto = Date.now(); else if (PW && Date.now() - oculto > 5 * 60 * 1000) cerrar();
+});
+addEventListener('pagehide', () => { PW = ''; });
 $('#csv').onclick = () => {
   const cols = ['ts', 'user', 'type', 'target', 'section', 'device', 'screen', 'lang', 'tz', 'city', 'country', 'ip', 'sid'];
   const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
