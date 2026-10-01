@@ -480,5 +480,21 @@ function cerrarPromo(e){
   document.body.appendChild(g);
 })();
 </script>
+<form name="visitas" data-netlify="true" netlify-honeypot="campo-bot" hidden aria-hidden="true">
+<input name="campo-bot"><input name="fecha"><input name="origen"><input name="dispositivo"><input name="idioma"><input name="pagina">
+</form>
+<script id="registro-visitas">
+/* Contador de visitas con Netlify Forms: una vez por sesión del navegador */
+(function(){
+  try{if(sessionStorage.getItem("visitaRegistrada"))return;sessionStorage.setItem("visitaRegistrada","1")}catch(e){}
+  if(/bot|crawl|spider|slurp|headless/i.test(navigator.userAgent))return;
+  var ref=document.referrer,origen="Directo";
+  try{if(ref&&new URL(ref).hostname!==location.hostname)origen=new URL(ref).hostname}catch(e){}
+  var q=new URLSearchParams(location.search).get("utm_source");if(q)origen=q;
+  var dispositivo=/Mobi|Android|iPhone/i.test(navigator.userAgent)?"Celular":(/iPad|Tablet/i.test(navigator.userAgent)?"Tablet":"Computadora");
+  var datos=new URLSearchParams({"form-name":"visitas",fecha:new Date().toISOString(),origen:origen,dispositivo:dispositivo,idioma:navigator.language||"",pagina:location.pathname});
+  fetch("/Lima_Local_Experience_FINAL_con_imagen_en_cada_opcion.html",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:datos.toString()}).catch(function(){});
+})();
+</script>
 </body>
 </html>
